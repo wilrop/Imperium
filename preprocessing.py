@@ -12,7 +12,7 @@ def preprocess(data):
         '# of meetings': int,
         'registered date': str
     }
-    recent_file = f'{data}/2021/all_2021.csv'
+    recent_file = f'{data}/2021/all/all_2021.csv'
     df = pd.read_csv(recent_file, dtype=columns)
     print("DUPLICATES")
     print(df.duplicated)
@@ -20,6 +20,7 @@ def preprocess(data):
     print("DUPLICATES DONE")
     print(df.dtypes)
     print(df.iloc[0])
+    return df
 
 
 if __name__ == "__main__":
