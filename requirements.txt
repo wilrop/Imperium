@@ -1,5 +1,4 @@
 altair==4.1.0
-appdirs==1.4.4
 appnope==0.1.2
 argon2-cffi==20.1.0
 astor==0.8.1
@@ -12,16 +11,13 @@ blinker==1.4
 cachetools==4.2.1
 certifi==2020.12.5
 cffi==1.14.5
-chardet==3.0.4
+chardet==4.0.0
 click==7.1.2
 decorator==4.4.2
 defusedxml==0.7.0
-distlib==0.3.1
 entrypoints==0.3
-filelock==3.0.12
 gitdb==4.0.5
 GitPython==3.1.14
-h8mail==2.5.4
 idna==2.10
 ipykernel==5.5.0
 ipython==7.21.0
@@ -62,7 +58,7 @@ pyrsistent==0.17.3
 python-dateutil==2.8.1
 pytz==2021.1
 pyzmq==22.0.3
-requests==2.25.0
+requests==2.25.1
 Send2Trash==1.5.0
 six==1.15.0
 smmap==3.0.5
@@ -74,9 +70,8 @@ toolz==0.11.1
 tornado==6.1
 traitlets==5.0.5
 tzlocal==2.1
-urllib3==1.26.2
+urllib3==1.26.3
 validators==0.18.2
-virtualenv==20.0.31
 wcwidth==0.2.5
 webencodings==0.5.1
 widgetsnbextension==3.5.1
