@@ -1,51 +1,17 @@
 import argparse
-import itertools
-import pandas as pd
 import streamlit as st
-import plotly.express as px
 
-from md_templates import *
-from preprocessing import preprocess
-
-categories = {
-        'Professional consultancies/law firms/self-employed consultants': (
-            'Professional consultancies',
-            'Law firms',
-            'Self-employed consultants'
-        ),
-        'In-house lobbyists and trade/professional associations': (
-            'Companies & groups',
-            'Trade and business organisations',
-            'Trade unions and professional associations',
-            'Other in house lobbyists'
-        ),
-        'Non-governmental organisations': (
-            'Non-governmental organisations, platforms and networks and similar',
-        ),
-        'Think tanks, research and academic institutions': (
-            'Think tanks and research institutions',
-            'Academic institutions'
-        ),
-        'Organisations representing churches and religious communities': (
-            'Organisations representing churches and religious communities',
-        ),
-        'Organisations representing local, regional and municipal authorities, other public or mixed entities, etc.': (
-            'Regional structures',
-            'Other sub-national public authorities',
-            'Transnational associations and networks of public regional or other sub-national authorities',
-            'Other public or mixed entities, created by law whose purpose is to act in the public interest'
-        )
-    }
-
-all_categories = tuple(itertools.chain.from_iterable(categories.items()))
+import md_templates
+import europe_map
+import preprocessing
 
 
 def run(args):
     print('Running the Imperium app')
-    data = preprocess(args.data)
+    data = preprocessing.preprocess(args.data)
 
     # Main template
-    st.markdown(start_template)
+    st.markdown(md_templates.start_template)
 
     # Sidebar elements
     view_selectbox = st.sidebar.selectbox(
@@ -56,32 +22,20 @@ def run(args):
     data_explorer_button = st.sidebar.button('Explore the raw data!')
 
     if data_explorer_button:
-        st.markdown(data_explorer_template)
+        st.markdown(md_templates.data_explorer_template)
         st.dataframe(data)
 
     if view_selectbox == 'Show me the map':
-        draw_map()
+        map = europe_map.map_plot()
+        st.write(map)
     elif view_selectbox == 'Categories':
-        st.markdown(categories_template)
-        category_selectbox = st.selectbox("Select category", tuple(categories.keys()))
-        if category_selectbox in categories.keys():
-            print(categories[category_selectbox])
-            st.selectbox('Select subcategory', categories[category_selectbox])
-        st.markdown(compare_categories_template)
-        compare_multiselect = st.multiselect('Compare categories', all_categories)
-
-
-def draw_map():
-    d = {'ISO-3': ["ESP", "BEL"], 'spending': ["Apple", "Shell"]}
-    df = pd.DataFrame(data=d)
-    fig = px.choropleth(df,
-                        locations='ISO-3',
-                        locationmode="ISO-3",
-                        color="spending",
-                        scope="europe",
-                        labels={'spending': 'Biggest spending'},
-                        )
-    st.write(fig)
+        st.markdown(md_templates.categories_template)
+        category_selectbox = st.selectbox("Select category", tuple(preprocessing.categories.keys()))
+        if category_selectbox in preprocessing.categories.keys():
+            print(preprocessing.categories[category_selectbox])
+            st.selectbox('Select subcategory', preprocessing.categories[category_selectbox])
+        st.markdown(md_templates.compare_categories_template)
+        compare_multiselect = st.multiselect('Compare categories', preprocessing.all_categories)
 
 
 if __name__ == "__main__":

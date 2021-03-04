@@ -1,5 +1,38 @@
 import argparse
+import itertools
 import pandas as pd
+
+categories = {
+        'Professional consultancies/law firms/self-employed consultants': (
+            'Professional consultancies',
+            'Law firms',
+            'Self-employed consultants'
+        ),
+        'In-house lobbyists and trade/professional associations': (
+            'Companies & groups',
+            'Trade and business organisations',
+            'Trade unions and professional associations',
+            'Other in house lobbyists'
+        ),
+        'Non-governmental organisations': (
+            'Non-governmental organisations, platforms and networks and similar',
+        ),
+        'Think tanks, research and academic institutions': (
+            'Think tanks and research institutions',
+            'Academic institutions'
+        ),
+        'Organisations representing churches and religious communities': (
+            'Organisations representing churches and religious communities',
+        ),
+        'Organisations representing local, regional and municipal authorities, other public or mixed entities, etc.': (
+            'Regional structures',
+            'Other sub-national public authorities',
+            'Transnational associations and networks of public regional or other sub-national authorities',
+            'Other public or mixed entities, created by law whose purpose is to act in the public interest'
+        )
+    }
+
+all_categories = tuple(itertools.chain.from_iterable(categories.items()))
 
 
 def preprocess(data):
