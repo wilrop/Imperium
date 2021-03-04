@@ -1,7 +1,8 @@
 import argparse
 import itertools
+import pandas as pd
 import streamlit as st
-from map import *
+import plotly.express as px
 
 from md_templates import *
 from preprocessing import preprocess
@@ -19,14 +20,14 @@ categories = {
             'Other in house lobbyists'
         ),
         'Non-governmental organisations': (
-            'Non-governmental organisations, platforms and networks and similar'
+            'Non-governmental organisations, platforms and networks and similar',
         ),
         'Think tanks, research and academic institutions': (
             'Think tanks and research institutions',
             'Academic institutions'
         ),
         'Organisations representing churches and religious communities': (
-            'Organisations representing churches and religious communities'
+            'Organisations representing churches and religious communities',
         ),
         'Organisations representing local, regional and municipal authorities, other public or mixed entities, etc.': (
             'Regional structures',
@@ -37,6 +38,7 @@ categories = {
     }
 
 all_categories = tuple(itertools.chain.from_iterable(categories.items()))
+
 
 def run(args):
     print('Running the Imperium app')
@@ -63,9 +65,23 @@ def run(args):
         st.markdown(categories_template)
         category_selectbox = st.selectbox("Select category", tuple(categories.keys()))
         if category_selectbox in categories.keys():
+            print(categories[category_selectbox])
             st.selectbox('Select subcategory', categories[category_selectbox])
         st.markdown(compare_categories_template)
         compare_multiselect = st.multiselect('Compare categories', all_categories)
+
+
+def draw_map():
+    d = {'ISO-3': ["ESP", "BEL"], 'spending': ["Apple", "Shell"]}
+    df = pd.DataFrame(data=d)
+    fig = px.choropleth(df,
+                        locations='ISO-3',
+                        locationmode="ISO-3",
+                        color="spending",
+                        scope="europe",
+                        labels={'spending': 'Biggest spending'},
+                        )
+    st.write(fig)
 
 
 if __name__ == "__main__":
