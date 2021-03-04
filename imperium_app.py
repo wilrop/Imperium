@@ -1,6 +1,7 @@
 import argparse
 import itertools
 import streamlit as st
+from map import *
 
 from md_templates import *
 from preprocessing import preprocess
@@ -57,7 +58,7 @@ def run(args):
         st.dataframe(data)
 
     if view_selectbox == 'Show me the map':
-        pass
+        draw_map()
     elif view_selectbox == 'Categories':
         st.markdown(categories_template)
         category_selectbox = st.selectbox("Select category", tuple(categories.keys()))
