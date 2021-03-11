@@ -119,8 +119,6 @@ def read_files(columns):
                     begin_int, end_int = generate_interval(lobby_cost_str)
                     df[begin_interval_name][index] = begin_int
                     df[end_interval_name][index] = end_int
-                    # row[begin_interval_name] = begin_int
-                    # row[end_interval_name] = end_int
                 df[year_column_name] = i
                 df[main_cat_column_name] = j
                 df[sub_cat_column_name] = key
