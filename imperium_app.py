@@ -3,16 +3,16 @@ import streamlit as st
 
 import md_templates
 import europe_map
-import data_loader
+from data_loader import DataLoader
 
 
 def run(args):
     print('Running the Imperium app')
-    data = data_loader.preprocess(args.data)
+    data = DataLoader()
 
-    countries = data_loader.get_countries()
-    categories = data_loader.get_top_level_categories()
-    businesses = data_loader.get_businesses()
+    countries = data.get_countries()
+    categories = data.get_top_level_categories()
+    businesses = data.get_businesses()
 
     # Main template
     st.markdown(md_templates.start_template)
@@ -43,7 +43,7 @@ def run(args):
         st.markdown(md_templates.explore_categories_template)
         category = st.selectbox("Select category", categories)
         if category in categories:
-            st.selectbox('Select subcategory', data_loader.get_low_level_categories(category))
+            st.selectbox('Select subcategory', data.get_low_level_categories(category))
         # TODO: decide on visualisation
 
         st.markdown(md_templates.explore_businesses_template)

@@ -36,11 +36,16 @@ class DataLoader:
         }
         self.top_level_categories = self.categories.keys()
         self.businesses = self.load_businesses()
+        self.countries = self.load_countries()
         print(self.businesses)
 
     def load_businesses(self):
         all_businesses = self.data['organisation name']
         return all_businesses.drop_duplicates().to_list()
+
+    def load_countries(self):
+        all_countries = self.data['country head office']
+        return all_countries.drop_duplicates().to_list()
 
     def get_top_level_categories(self):
         return tuple(self.top_level_categories)
@@ -52,6 +57,6 @@ class DataLoader:
         return tuple(self.businesses)
 
     def get_countries(self):
-        return tuple([0, 1])
+        return tuple(self.countries)
 
 DataLoader()
