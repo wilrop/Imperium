@@ -8,8 +8,12 @@ from data_loader import DataLoader
 
 
 def run():
+    """
+    This is the main function that runs our streamlit app.
+    :return: /
+    """
     print('Running the Imperium app')
-    data = DataLoader()
+    data = DataLoader()  # Initialise the data loader.
 
     countries = data.get_countries()
     categories = data.get_top_level_categories()
@@ -28,7 +32,7 @@ def run():
 
     if data_explorer_button:
         st.markdown(md_templates.data_explorer_template)
-        st.dataframe(data)
+        st.dataframe(data.data)
 
     if view_selectbox == 'Show me the map':
         _max_width_()
@@ -55,7 +59,6 @@ def run():
         business_data = data.get_business_data(business)
         business_plot = explorer_plots.explore_business(business_data)
         st.write(business_plot)
-        # TODO: decide on visualisation
 
     elif view_selectbox == 'Compare':
         st.markdown(md_templates.compare_template)
@@ -73,7 +76,11 @@ def run():
         # TODO: decide on visualisation
 
 
-def _max_width_():  # Streamlit will open plotly graphs in a small window, this will make it fullscreen.
+def _max_width_():
+    """
+    Streamlit will open plotly graphs in a small window, this will make it fullscreen.
+    :return: /
+    """
     max_width_str = f"max-width: 2000px;"
     st.markdown(
         f"""
