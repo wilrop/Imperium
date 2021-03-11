@@ -1,8 +1,10 @@
-import argparse
 import pandas as pd
 
 
 class DataLoader:
+    """
+    A class to load preprocessed data from a file and then make it available for fast access to other processes.
+    """
     def __init__(self, file='data/data_cat.csv'):
         self.data = pd.read_csv(file)
         self.categories = {
@@ -39,29 +41,64 @@ class DataLoader:
         self.countries = self.load_countries()
 
     def load_businesses(self):
+        """
+        This method will load all distinct businesses in the dataset into a list.
+        :return: A list of all businesses.
+        """
         all_businesses = self.data['organisation name']
         return all_businesses.drop_duplicates().to_list()
 
     def load_countries(self):
+        """
+        This method will load all distinct countries in the dataset into a list.
+        :return: A list of all countries.
+        """
         all_countries = self.data['country head office']
         return all_countries.drop_duplicates().to_list()
 
     def get_top_level_categories(self):
+        """
+        This method gets all top level categories.
+        :return: A tuple containing all top level categories.
+        """
         return tuple(self.top_level_categories)
 
     def get_low_level_categories(self, category):
+        """
+        This method gets all low level categories for a specific top level category.
+        :param category: The top level category.
+        :return: A tuple of all categories that fall under this top level category.
+        """
         return tuple(self.categories[category])
 
     def get_businesses(self):
+        """
+        This method gets all the businesses in the dataset.
+        :return: A tuple of all distinct businesses.
+        """
         return tuple(self.businesses)
 
     def get_countries(self):
+        """
+        This method gets all the countries in the dataset.
+        :return: A tuple of all distinct countries.
+        """
         return tuple(self.countries)
 
     def get_country_data(self, country):
+        """
+        This method returns all available data about a specific country.
+        :param country: The country that we want data about.
+        :return: The rows in the dataset that contain the country.
+        """
         country_data = self.data.loc[self.data['country head office'] == country]
         return country_data
 
     def get_business_data(self, business):
+        """
+        This method gets all available data about a specific business.
+        :param business: The business that we want data about.
+        :return: The rows in the dataset that contain the country.
+        """
         business_data = self.data.loc[self.data['organisation name'] == business]
         return business_data
