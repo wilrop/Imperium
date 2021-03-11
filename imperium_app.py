@@ -9,6 +9,7 @@ import preprocessing
 def run(args):
     print('Running the Imperium app')
     data = preprocessing.preprocess(args.data)
+
     countries = preprocessing.get_countries()
     categories = preprocessing.get_top_level_categories()
     businesses = preprocessing.get_businesses()
@@ -29,6 +30,7 @@ def run(args):
         st.dataframe(data)
 
     if view_selectbox == 'Show me the map':
+        _max_width_()
         map = europe_map.map_plot()
         st.write(map)
     elif view_selectbox == 'Explore':
@@ -62,6 +64,20 @@ def run(args):
         st.markdown(md_templates.compare_businesses_template)
         business = st.multiselect("Select businesses", businesses)
         # TODO: decide on visualisation
+
+
+def _max_width_():  # Streamlit will open plotly graphs in a small window, this will make it fullscreen.
+    max_width_str = f"max-width: 2000px;"
+    st.markdown(
+        f"""
+    <style>
+    .reportview-container .main .block-container{{
+        {max_width_str}
+    }}
+    </style>    
+    """,
+        unsafe_allow_html=True,
+    )
 
 
 if __name__ == "__main__":
