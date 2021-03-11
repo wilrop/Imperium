@@ -9,6 +9,7 @@ import preprocessing
 def run(args):
     print('Running the Imperium app')
     data = preprocessing.preprocess(args.data)
+    _max_width_()
 
     # Main template
     st.markdown(md_templates.start_template)
@@ -36,6 +37,23 @@ def run(args):
             st.selectbox('Select subcategory', preprocessing.categories[category_selectbox])
         st.markdown(md_templates.compare_categories_template)
         compare_multiselect = st.multiselect('Compare categories', preprocessing.all_categories)
+
+
+
+
+## Streamlit will open plotly graphs in a small window, this will make it fullscreen.
+def _max_width_():
+    max_width_str = f"max-width: 2000px;"
+    st.markdown(
+        f"""
+    <style>
+    .reportview-container .main .block-container{{
+        {max_width_str}
+    }}
+    </style>    
+    """,
+        unsafe_allow_html=True,
+    )
 
 
 if __name__ == "__main__":
