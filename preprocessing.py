@@ -5,6 +5,8 @@ max_year = 2021
 year_column_name = 'year'
 main_cat_column_name = 'main_cat'
 sub_cat_column_name = 'sub_cat'
+begin_interval_name = 'begin_int'
+end_interval_name = 'end_int'
 
 organisation_name_str = 'organisation name'
 country_head_office_str = 'country head office'
@@ -66,6 +68,31 @@ sub_categories = {
 
 num_categories = len(main_categories.keys())
 
+def generate_interval(string_interval):
+    string_interval = string_interval.replace(",","")
+    string_interval = string_interval.replace(" ","")
+    start_interval, end_interval = 0,0
+
+    if string_interval.startswith('<'):
+        end_interval = int(string_interval[1:])
+    elif string_interval.startswith('>'):
+        begin_interval = int(string_interval[1:])
+        end_interval = begin_interval
+    elif string_interval == 'nofigureavailable':
+        pass
+    elif '-' in string_interval:
+        string_interval = string_interval.split('-')
+        start_interval = int(string_interval[0])
+        end_interval = int(string_interval[1])
+    elif string_interval.isdigit():
+        start_interval = int(string_interval)
+        end_interval = int(string_interval)
+    else:
+        print(string_interval)
+
+
+    return start_interval, end_interval
+
 def read_files(columns):
     dataframes = []
     dataframes_cat = []
@@ -85,6 +112,15 @@ def read_files(columns):
                 file_name = './data/' + year_string + '/category/' + str(j) + '/' + str(key) + '.csv'
                 print('Reading: ', file_name)
                 df = pd.read_csv(file_name, dtype=columns)
+                df[begin_interval_name] = 0
+                df[end_interval_name] = 0
+                for index, row in df.iterrows():
+                    lobby_cost_str = row[lobbying_costs_str]
+                    begin_int, end_int = generate_interval(lobby_cost_str)
+                    df[begin_interval_name][index] = begin_int
+                    df[end_interval_name][index] = end_int
+                    # row[begin_interval_name] = begin_int
+                    # row[end_interval_name] = end_int
                 df[year_column_name] = i
                 df[main_cat_column_name] = j
                 df[sub_cat_column_name] = key
@@ -101,9 +137,11 @@ def generate_category_data():
     return dataframe_all, dataframe_cat
 
 if __name__ == "__main__":
-    print('Starting Categories')
+    print('Starting')
     df_all, df_cat = generate_category_data()
     
     df_all.to_csv(all_file_name, index=False)
     df_cat.to_csv(cat_file_name, index=False)
+
+    # print(generate_interval('< 9,999'))
 
