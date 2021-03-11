@@ -104,6 +104,6 @@ if __name__ == "__main__":
     print('Starting Categories')
     df_all, df_cat = generate_category_data()
     
-    df_all.to_csv(all_file_name, index=True)
-    df_cat.to_csv(cat_file_name, index=True)
+    df_all.to_csv(all_file_name, index=False)
+    df_cat.to_csv(cat_file_name, index=False)
 
