@@ -11,13 +11,9 @@ def map_plot():
                          locations='ISO-3',
                          locationmode="ISO-3",
                          color="spending",
-                         scope="europe",
+                         scope="world",
                          labels={'spending': 'Biggest spending'},
                          width=1000,
                          height=1000
-                         )
-
-
-    
-
+                         )        
     return fig
