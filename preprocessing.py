@@ -32,7 +32,21 @@ categories = {
         )
     }
 
-all_categories = tuple(itertools.chain.from_iterable(categories.items()))
+
+def get_top_level_categories():
+    return tuple(categories.keys())
+
+
+def get_low_level_categories(category):
+    return tuple(categories[category])
+
+
+def get_businesses():
+    return tuple(['a', 'b'])
+
+
+def get_countries():
+    return tuple(['a', 'b'])
 
 
 def preprocess(data):
