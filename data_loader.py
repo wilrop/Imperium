@@ -37,7 +37,6 @@ class DataLoader:
         self.top_level_categories = self.categories.keys()
         self.businesses = self.load_businesses()
         self.countries = self.load_countries()
-        print(self.businesses)
 
     def load_businesses(self):
         all_businesses = self.data['organisation name']
@@ -66,6 +65,3 @@ class DataLoader:
     def get_business_data(self, business):
         business_data = self.data.loc[self.data['organisation name'] == business]
         return business_data
-
-data = DataLoader()
-print(data.get_business_data('Stargames Oy').to_string())
