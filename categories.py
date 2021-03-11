@@ -13,14 +13,51 @@ num_meetings_str = '# of meetings'
 registered_date_str = 'registered date'
 
 columns = {
-        organisation_name_str: str,
-        country_head_office_str: str,
-        lobbying_costs_str: str,  # Preprocess this into something of an integer/float/number
-        ep_passes_str: int,
-        lobbyists_fte_str: float,
-        num_meetings_str: int,
-        registered_date_str: str
+    organisation_name_str: str,
+    country_head_office_str: str,
+    lobbying_costs_str: str,  # Preprocess this into something of an integer/float/number
+    ep_passes_str: int,
+    lobbyists_fte_str: float,
+    num_meetings_str: int,
+    registered_date_str: str
+}
+
+main_categories = {
+    1: 'Professional consultancies/law firms/self-employed consultants'
+    2: 'In-house lobbyists and trade/professional associations'
+    3: 'Non-governmental organisations'
+    4: 'Think tanks, research and academic institutions'
+    5: 'Organisations representing churches and religious communities'
+    6: 'Organisations representing local, regional and municipal authorities, other public or mixed entities, etc.'
+}
+
+sub_categories = {
+    1: {
+        1: 'Professional consultancies'
+        2: 'Law firms'
+        3: 'Self-employed consultants'
     }
+    2: {
+        1: 'Companies & groups'
+        2: 'Trade and business organisations'
+        3: 'Trade unions and professional associations'
+        4: 'Other in house lobbyists'
+    }
+    3: {
+        1: 'Non-governmental organisations, platforms and networks and similar'
+    }
+    4: {
+        1: 'Think tanks and research institutions'
+        2: 'Academic institutions'
+    }
+    5: {
+        1: 'Organisations representing churches and religious communities'
+    }
+    6: {
+        1: 'Regional structures'
+        2: 'Other sub-national public authorities'
+    }
+}
 
 def read_files(columns):
     dataframes = []
