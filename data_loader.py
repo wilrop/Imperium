@@ -59,4 +59,13 @@ class DataLoader:
     def get_countries(self):
         return tuple(self.countries)
 
-DataLoader()
+    def get_country_data(self, country):
+        country_data = self.data.loc[self.data['country head office'] == country]
+        return country_data
+
+    def get_business_data(self, business):
+        business_data = self.data.loc[self.data['organisation name'] == business]
+        return business_data
+
+data = DataLoader()
+print(data.get_business_data('Stargames Oy').to_string())
