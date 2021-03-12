@@ -1,13 +1,30 @@
 import pandas as pd
 
+# The minimum year of available data
 min_year = 2012
+
+# The maximum year of available data
 max_year = 2021
+
+
+# Names of the new columns that are added to the dataframe
+# Year when the data was published
 year_column_name = 'year'
+
+# Main category of the organisation
 main_cat_column_name = 'main_cat'
+
+# Sub category in the main category of the organisation
 sub_cat_column_name = 'sub_cat'
+
+# Begin value of the lobbying cost interval
 begin_interval_name = 'begin_int'
+
+# End value of the lobbying cost interval
 end_interval_name = 'end_int'
 
+
+# Existing column names in the downloaded data
 organisation_name_str = 'organisation name'
 country_head_office_str = 'country head office'
 lobbying_costs_str = 'lobbying costs'
@@ -16,19 +33,24 @@ lobbyists_fte_str = 'lobbyists (FTE)'
 num_meetings_str = '# of meetings'
 registered_date_str = 'registered date'
 
+# Paths of the files that will be stored after preprocessing
+# File with all the data (no categories)
 all_file_name = './data/' + 'data_all.csv'
+# File with all the data (with categories)
 cat_file_name = './data/' + 'data_cat.csv'
 
+# Column types for the dataframe
 columns = {
     organisation_name_str: str,
     country_head_office_str: str,
-    lobbying_costs_str: str,  # Preprocess this into something of an integer/float/number
+    lobbying_costs_str: str,
     ep_passes_str: int,
     lobbyists_fte_str: float,
     num_meetings_str: int,
     registered_date_str: str
 }
 
+# The folder in the data directory are numbered, each number represents a category which is given here.
 main_categories = {
     1: 'Professional consultancies/law firms/self-employed consultants',
     2: 'In-house lobbyists and trade/professional associations',
@@ -38,6 +60,7 @@ main_categories = {
     6: 'Organisations representing local, regional and municipal authorities, other public or mixed entities, etc.'
 }
 
+# The files in the data directory are numbered, each number represents a category which is given here.
 sub_categories = {
     1: {
         1: 'Professional consultancies',
@@ -66,9 +89,24 @@ sub_categories = {
     }
 }
 
+# Get the number of availble main categories in the data
 num_categories = len(main_categories.keys())
 
 def generate_interval(string_interval):
+    """
+    Method to transform the lobbying costs from the dataframe to an interval.
+    There are 5 possible string formats from which an interval needs to ge generated:
+    1. '< number' -> [0, number]
+    2. '> number' -> [number, number]
+    3. 'no figure available' -> [0,0]
+    4. 'number1 - number2' -> [number1, number2]
+    5. 'number' -> [number, number]
+    Args:
+        string_interval (str): The string with the lobbying costs from the dataframe.
+    Returns:
+        start_interval (int): The begin value of the interval.
+        end_interval (int): The end value of the interval.
+    """
     string_interval = string_interval.replace(",","")
     string_interval = string_interval.replace(" ","")
     start_interval, end_interval = 0,0
@@ -88,19 +126,26 @@ def generate_interval(string_interval):
         start_interval = int(string_interval)
         end_interval = int(string_interval)
     else:
-        print(string_interval)
-
+        print('ERROR: ', string_interval)
 
     return start_interval, end_interval
 
 def read_files(columns):
+    """
+    Method to read in the data which is present in the csv files in the data folder.
+    The data is loaded into pandas dataframes which is contained in a list.
+    Args:
+        columns (dict): The input dictionary which contains the input types of the columns.
+    Returns:
+        dataframes (list[dataframe]): List of dataframes which contains the data of the all_ files.
+        dataframes_cat (list[dataframe]): List of dataframes which contains the data of the category files.
+    """
     dataframes = []
     dataframes_cat = []
     for i in range(min_year, max_year + 1):
-        #print(i)
         year_string = str(i)
         file_name = './data/' + year_string + '/all/' + 'all_' + year_string + '.csv'
-        print('Reading: ', file_name)
+        print('Reading ALL: ', file_name)
         df = pd.read_csv(file_name, dtype=columns)
         df[year_column_name] = i
         dataframes.append(df)
@@ -110,7 +155,7 @@ def read_files(columns):
             sub_cat_dict = sub_categories[j]
             for key in sub_cat_dict:
                 file_name = './data/' + year_string + '/category/' + str(j) + '/' + str(key) + '.csv'
-                print('Reading: ', file_name)
+                print('Reading CAT: ', file_name)
                 df = pd.read_csv(file_name, dtype=columns)
                 df[begin_interval_name] = 0
                 df[end_interval_name] = 0
@@ -126,7 +171,16 @@ def read_files(columns):
 
     return dataframes, dataframes_cat
 
-def generate_category_data():
+def generate_data():
+    """
+    Method to start reading the files, concat the resulting dataframes and sort the dataframe data based on
+    the organisation name and the year of the published data.
+    Args:
+        ()
+    Returns:
+        dataframe_all (dataframe): Dataframe which contains the data of the all_ files.
+        dataframe_cat (dataframe): Dataframe which contains the data of the category files.
+    """
     dataframes_all, dataframes_cat = read_files(columns)
     dataframe_all = pd.concat(dataframes_all)
     dataframe_cat = pd.concat(dataframes_cat)
@@ -135,11 +189,10 @@ def generate_category_data():
     return dataframe_all, dataframe_cat
 
 if __name__ == "__main__":
-    print('Starting')
-    df_all, df_cat = generate_category_data()
-    
+    print('Starting Preprocessing...')
+    df_all, df_cat = generate_data()
+
+    # Save dataframes as CSV files
     df_all.to_csv(all_file_name, index=False)
     df_cat.to_csv(cat_file_name, index=False)
-
-    # print(generate_interval('< 9,999'))
-
+    
