@@ -4,6 +4,7 @@ import streamlit as st
 import md_templates
 import europe_map
 import explorer_plots
+import comparer_plots
 from data_loader import DataLoader
 
 
@@ -72,7 +73,11 @@ def run():
         # TODO: decide on visualisation
 
         st.markdown(md_templates.compare_businesses_template)
-        business = st.multiselect("Select businesses", businesses)
+        businesses = st.multiselect("Select businesses", businesses)
+        businesses_data = data.get_businesses_data(businesses)
+        if not businesses_data.empty:
+            businesses_plot = comparer_plots.compare_businesses(businesses_data)
+            st.write(businesses_plot)
         # TODO: decide on visualisation
 
 

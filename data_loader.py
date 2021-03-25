@@ -98,7 +98,17 @@ class DataLoader:
         """
         This method gets all available data about a specific business.
         :param business: The business that we want data about.
-        :return: The rows in the dataset that contain the country.
+        :return: The rows in the dataset that contain the business.
         """
         business_data = self.data.loc[self.data['organisation name'] == business]
         return business_data
+
+    def get_businesses_data(self, businesses):
+        """
+        This method gets all available data about a list of businesses.
+        :param businesses: The businesses that we want data about.
+        :return: The rows in the dataset that contain one of these businesses.
+        """
+        businesses_data = self.data.loc[self.data['organisation name'].isin(businesses)]
+        businesses_data = businesses_data.groupby(['organisation name'], as_index=False).idxmax()
+        return businesses_data
