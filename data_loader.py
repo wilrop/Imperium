@@ -1,4 +1,5 @@
 import pandas as pd
+from preprocessing import string_to_int_subcategory, string_to_int_category
 
 
 class DataLoader:
@@ -112,3 +113,18 @@ class DataLoader:
         businesses_data = self.data.loc[self.data['organisation name'].isin(businesses)]
         businesses_data = businesses_data.groupby(['organisation name'], as_index=False).idxmax()
         return businesses_data
+
+    def get_subcategory_data(self, category,subcategory):
+        """
+        This method gets all available data about a list of subcategories.
+        :param businesses: The subcategory that we want data about.
+        :return: The rows in the dataset that contain one of these subcategories.
+        """
+        category_nr = string_to_int_category[category]
+        subcategory_nr = string_to_int_subcategory[subcategory]
+        category_data = self.data.loc[self.data['main_cat'] == category_nr]   
+        subcategory_data = category_data.loc[category_data['sub_cat'] == subcategory_nr]
+        
+        return subcategory_data
+
+

@@ -91,6 +91,31 @@ sub_categories = {
     }
 }
 
+string_to_int_subcategory = {
+    'Professional consultancies': 1,
+    'Law firms': 2,
+    'Self-employed consultants': 3,
+    'Companies & groups': 1,
+    'Trade and business organisations': 2,
+    'Other in house lobbyists': 3,
+    'Non-governmental organisations, platforms and networks and similar' : 1,
+    'Think tanks and research institutions': 1,
+    'Academic institutions': 2,
+    'Organisations representing churches and religious communities': 1,
+    'Regional structures': 1,
+    'Other sub-national public authorities': 2
+}
+
+string_to_int_category = {
+    'Professional consultancies/law firms/self-employed consultants' : 1,
+    'In-house lobbyists and trade/professional associations' : 2,
+    'Non-governmental organisations' : 3,
+    'Think tanks, research and academic institutions': 4,
+    'Organisations representing churches and religious communities': 5,
+    'Organisations representing local, regional and municipal authorities, other public or mixed entities, etc.' : 6
+}
+
+
 # Get the number of availble main categories in the data
 num_categories = len(main_categories.keys())
 

@@ -52,10 +52,11 @@ def run():
         st.markdown(md_templates.explore_categories_template)
         category = st.selectbox("Select category", categories)
         if category in categories:
-            st.selectbox('Select subcategory', data.get_low_level_categories(category))
-        category_data = data.get_low_level_categories(category)
-        category_plot = explorer_plots.explore_category(category_data)
-        st.write(category_plot)
+            subcategory = st.selectbox('Select subcategory', data.get_low_level_categories(category))
+            subcategory_data = data.get_subcategory_data(category,subcategory)
+            if not subcategory_data.empty:
+                category_plot = explorer_plots.explore_category(subcategory_data)
+                st.write(category_plot)
 
         st.markdown(md_templates.explore_businesses_template)
         business = st.selectbox("Select business", businesses)

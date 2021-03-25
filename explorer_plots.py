@@ -27,7 +27,7 @@ def explore_country(country_data):
 
 
 def explore_category(category_data):
-    print(category_data)
+    print("hello",category_data)
     sum_begin_int = [0] * (amount_years + 1)
     sum_end_int = [0]  * (amount_years + 1)
     year_list = []
