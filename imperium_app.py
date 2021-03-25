@@ -47,13 +47,15 @@ def run():
         country_data = data.get_country_data(country)
         country_plot = explorer_plots.explore_country(country_data)
         st.write(country_plot)
-        # TODO: decide on visualisation
+        
 
         st.markdown(md_templates.explore_categories_template)
         category = st.selectbox("Select category", categories)
         if category in categories:
             st.selectbox('Select subcategory', data.get_low_level_categories(category))
-        # TODO: decide on visualisation
+        category_data = data.get_low_level_categories(category)
+        category_plot = explorer_plots.explore_category(category_data)
+        st.write(category_plot)
 
         st.markdown(md_templates.explore_businesses_template)
         business = st.selectbox("Select business", businesses)

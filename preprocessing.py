@@ -6,6 +6,8 @@ min_year = 2012
 # The maximum year of available data
 max_year = 2021
 
+amount_years = max_year - min_year
+
 
 # Names of the new columns that are added to the dataframe
 # Year when the data was published
