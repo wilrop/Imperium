@@ -36,7 +36,15 @@ def explore_country(country_data):
             symmetric=False,
             color=marker_color,
             array=sum_end_int - sum_middle_int,
-            arrayminus=sum_middle_int - sum_begin_int)
+            arrayminus=sum_middle_int - sum_begin_int),
+    ))
+
+    fig.update_layout(
+    xaxis=dict(
+        rangeslider=dict(
+            visible=True
+        ),
+        type="date"
     ))
 
     return fig
@@ -73,6 +81,15 @@ def explore_category(category_data):
             array=sum_end_int - sum_middle_int,
             arrayminus=sum_middle_int - sum_begin_int)
     ))
+
+    fig.update_layout(
+    xaxis=dict(
+        rangeslider=dict(
+            visible=True
+        ),
+        type="date"
+    ))
+
     return fig
 
 
@@ -93,6 +110,14 @@ def explore_business(business_data):
             color=marker_color,
             array=sum_end_int - sum_middle_int,
             arrayminus=sum_middle_int - sum_begin_int)
+    ))
+
+    fig.update_layout(
+    xaxis=dict(
+        rangeslider=dict(
+            visible=True
+        ),
+        type="date"
     ))
 
     return fig
