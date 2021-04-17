@@ -31,8 +31,9 @@ def run():
 
     if view_selectbox == 'Show me the map':
         _max_width_()
-        map = europe_map.map_plot()
-        st.write(map)
+        iso3_codes, countries_bussines_amount = data.get_country_amount_of_companies()
+        map = europe_map.map_plot(iso3_codes, countries_bussines_amount)
+        st.write(map,width=5000,height=5000)
     elif view_selectbox == 'Explore':
         st.markdown(md_templates.explore_template)
 
