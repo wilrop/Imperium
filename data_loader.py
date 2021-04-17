@@ -1,4 +1,6 @@
 import pandas as pd
+import country_converter as coco
+import numpy as np
 from preprocessing import string_to_int_subcategory, string_to_int_category
 
 
@@ -126,5 +128,31 @@ class DataLoader:
         subcategory_data = category_data.loc[category_data['sub_cat'] == subcategory_nr]
         
         return subcategory_data
+
+
+    def get_country_amount_of_companies(self):
+        """
+        This method gets all the country names and transforms them to their respective ISO 3 code, together with the amount of
+        organisations per country
+        """
+
+        countries = list(self.get_countries())
+        countries_iso = []
+        countries_bussines_amount = []
+
+        # Some names were writting wrong, so some hard coded solution to rename those countries.
+        countries[countries.index('Afganistan')] = 'Afghanistan'
+        countries.remove('Netherlands Antilles')
+        countries[countries.index('Gibralter')] = 'Gibraltar'
+        countries = [country for country in countries if str(country) != 'nan']
+        
+
+        for country in countries:
+            df_country = self.get_country_data(country)
+            countries_bussines_amount.append(len(df_country))
+        
+        iso3_codes = coco.convert(names=countries, to='ISO3')
+        return iso3_codes, countries_bussines_amount
+
 
 
