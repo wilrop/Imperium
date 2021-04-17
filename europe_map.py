@@ -14,6 +14,6 @@ def map_plot():
                          scope="world",
                          labels={'spending': 'Biggest spending'},
                          width=1000,
-                         height=1000
-                         )        
+                         height=1000)
+
     return fig

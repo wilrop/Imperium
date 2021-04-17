@@ -2,13 +2,14 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 
-def explore_country(country_data):
-    fig = px.bar(country_data, x='year', y='lobbying costs')
+def compare_countries(countries_data):
+    fig = px.bar(countries_data, x='country head office', y=['begin_int', 'end_int'])
     return fig
 
 
-def explore_category():
-    return 0
+def compare_categories(categories_data):
+    fig = px.bar(categories_data, x='main_cat', y=['begin_int', 'end_int'])
+    return fig
 
 
 def compare_businesses(businesses_data):

@@ -107,12 +107,12 @@ string_to_int_subcategory = {
 }
 
 string_to_int_category = {
-    'Professional consultancies/law firms/self-employed consultants' : 1,
-    'In-house lobbyists and trade/professional associations' : 2,
-    'Non-governmental organisations' : 3,
+    'Professional consultancies/law firms/self-employed consultants': 1,
+    'In-house lobbyists and trade/professional associations': 2,
+    'Non-governmental organisations': 3,
     'Think tanks, research and academic institutions': 4,
     'Organisations representing churches and religious communities': 5,
-    'Organisations representing local, regional and municipal authorities, other public or mixed entities, etc.' : 6
+    'Organisations representing local, regional and municipal authorities, other public or mixed entities, etc.': 6
 }
 
 

@@ -13,11 +13,11 @@ def run():
     This is the main function that runs our streamlit app.
     :return: /
     """
-    print('Running the Imperium app')
     data = DataLoader()  # Initialise the data loader.
 
     countries = data.get_countries()
-    categories = data.get_top_level_categories()
+    categories = data.get_main_categories()
+    sub_categories = data.get_sub_categories()
     businesses = data.get_businesses()
 
     # Main template
@@ -26,14 +26,8 @@ def run():
     # Sidebar elements
     view_selectbox = st.sidebar.selectbox(
         'What would you like to do?',
-        ('Show me the map', 'Explore', 'Compare')
+        ('Show me the map', 'Explore', 'Compare', 'View raw data')
     )
-
-    data_explorer_button = st.sidebar.button('Explore the raw data!')
-
-    if data_explorer_button:
-        st.markdown(md_templates.data_explorer_template)
-        st.dataframe(data.data)
 
     if view_selectbox == 'Show me the map':
         _max_width_()
@@ -47,13 +41,12 @@ def run():
         country_data = data.get_country_data(country)
         country_plot = explorer_plots.explore_country(country_data)
         st.write(country_plot)
-        
 
         st.markdown(md_templates.explore_categories_template)
         category = st.selectbox("Select category", categories)
         if category in categories:
-            subcategory = st.selectbox('Select subcategory', data.get_low_level_categories(category))
-            subcategory_data = data.get_subcategory_data(category,subcategory)
+            subcategory = st.selectbox('Select subcategory', data.get_sub_categories_for_main(category))
+            subcategory_data = data.get_subcategory_data(category, subcategory)
             if not subcategory_data.empty:
                 category_plot = explorer_plots.explore_category(subcategory_data)
                 st.write(category_plot)
@@ -68,20 +61,31 @@ def run():
         st.markdown(md_templates.compare_template)
 
         st.markdown(md_templates.compare_countries_template)
-        comp_countries = st.multiselect("Select countries", countries)
+        countries_lst = st.multiselect("Select countries", countries)
+        countries_data = data.get_countries_data(countries_lst)
+        if not countries_data.empty:
+            countries_plot = comparer_plots.compare_countries(countries_data)
+            st.write(countries_plot)
         # TODO: decide on visualisation
 
         st.markdown(md_templates.compare_categories_template)
-        comp_categories = st.multiselect("Select categories", categories)
+        categories_lst = st.multiselect("Select categories", categories)
+        categories_data = data.get_categories_data(categories_lst)
+        if not categories_data.empty:
+            categories_plot = comparer_plots.compare_categories(categories_data)
+            st.write(categories_plot)
         # TODO: decide on visualisation
 
         st.markdown(md_templates.compare_businesses_template)
-        businesses = st.multiselect("Select businesses", businesses)
-        businesses_data = data.get_businesses_data(businesses)
+        businesses_lst = st.multiselect("Select businesses", businesses)
+        businesses_data = data.get_businesses_data(businesses_lst)
         if not businesses_data.empty:
             businesses_plot = comparer_plots.compare_businesses(businesses_data)
             st.write(businesses_plot)
         # TODO: decide on visualisation
+    elif view_selectbox == 'View raw data':
+        st.markdown(md_templates.data_explorer_template)
+        st.dataframe(data.data)
 
 
 def _max_width_():
@@ -103,6 +107,4 @@ def _max_width_():
 
 
 if __name__ == "__main__":
-    print('Starting the Imperium app')
     run()
-    print('Shut down the Imperium app')
