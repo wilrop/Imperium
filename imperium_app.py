@@ -2,7 +2,7 @@ import argparse
 import streamlit as st
 
 import md_templates
-import europe_map
+import world_map
 import explorer_plots
 import comparer_plots
 from data_loader import DataLoader
@@ -32,8 +32,8 @@ def run():
     if view_selectbox == 'Show me the map':
         _max_width_()
         iso3_codes, countries_bussines_amount = data.get_country_amount_of_companies()
-        map = europe_map.map_plot(iso3_codes, countries_bussines_amount)
-        st.write(map,width=5000,height=5000)
+        map = world_map.map_plot(iso3_codes, countries_bussines_amount)
+        st.write(map, width=5000, height=5000)
     elif view_selectbox == 'Explore':
         st.markdown(md_templates.explore_template)
 

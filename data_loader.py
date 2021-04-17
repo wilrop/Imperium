@@ -9,6 +9,7 @@ class DataLoader:
     """
     A class to load preprocessed data from a file and then make it available for fast access to other processes.
     """
+
     def __init__(self, file='data/data_cat.csv'):
         self.data = pd.read_csv(file)
         self.main_categories = {
@@ -181,9 +182,9 @@ class DataLoader:
         """
         category_nr = string_to_int_category[category]
         subcategory_nr = string_to_int_subcategory[subcategory]
-        category_data = self.data.loc[self.data['main_cat'] == category_nr]   
+        category_data = self.data.loc[self.data['main_cat'] == category_nr]
         subcategory_data = category_data.loc[category_data['sub_cat'] == subcategory_nr]
-        
+
         return subcategory_data
 
     def get_country_amount_of_companies(self):
@@ -204,6 +205,6 @@ class DataLoader:
         for country in countries:
             df_country = self.get_country_data(country)
             countries_bussines_amount.append(len(df_country))
-        
+
         iso3_codes = coco.convert(names=countries, to='ISO3')
         return iso3_codes, countries_bussines_amount

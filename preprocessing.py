@@ -8,7 +8,6 @@ max_year = 2021
 
 amount_years = max_year - min_year
 
-
 # Names of the new columns that are added to the dataframe
 # Year when the data was published
 year_column_name = 'year'
@@ -24,7 +23,6 @@ begin_interval_name = 'begin_int'
 
 # End value of the lobbying cost interval
 end_interval_name = 'end_int'
-
 
 # Existing column names in the downloaded data
 organisation_name_str = 'organisation name'
@@ -98,7 +96,7 @@ string_to_int_subcategory = {
     'Companies & groups': 1,
     'Trade and business organisations': 2,
     'Other in house lobbyists': 3,
-    'Non-governmental organisations, platforms and networks and similar' : 1,
+    'Non-governmental organisations, platforms and networks and similar': 1,
     'Think tanks and research institutions': 1,
     'Academic institutions': 2,
     'Organisations representing churches and religious communities': 1,
@@ -115,9 +113,9 @@ string_to_int_category = {
     'Organisations representing local, regional and municipal authorities, other public or mixed entities, etc.': 6
 }
 
-
 # Get the number of availble main categories in the data
 num_categories = len(main_categories.keys())
+
 
 def generate_interval(string_interval):
     """
@@ -134,9 +132,9 @@ def generate_interval(string_interval):
         start_interval (int): The begin value of the interval.
         end_interval (int): The end value of the interval.
     """
-    string_interval = string_interval.replace(",","")
-    string_interval = string_interval.replace(" ","")
-    start_interval, end_interval = 0,0
+    string_interval = string_interval.replace(",", "")
+    string_interval = string_interval.replace(" ", "")
+    start_interval, end_interval = 0, 0
 
     if string_interval.startswith('<'):
         end_interval = int(string_interval[1:])
@@ -156,6 +154,7 @@ def generate_interval(string_interval):
         print('ERROR: ', string_interval)
 
     return start_interval, end_interval
+
 
 def read_files(columns):
     """
@@ -198,6 +197,7 @@ def read_files(columns):
 
     return dataframes, dataframes_cat
 
+
 def generate_data():
     """
     Method to start reading the files, concat the resulting dataframes and sort the dataframe data based on
@@ -215,6 +215,7 @@ def generate_data():
     dataframe_cat = dataframe_cat.sort_values(by=[organisation_name_str, year_column_name])
     return dataframe_all, dataframe_cat
 
+
 if __name__ == "__main__":
     print('Starting Preprocessing...')
     df_all, df_cat = generate_data()
@@ -222,4 +223,3 @@ if __name__ == "__main__":
     # Save dataframes as CSV files
     df_all.to_csv(all_file_name, index=False)
     df_cat.to_csv(cat_file_name, index=False)
-    

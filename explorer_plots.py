@@ -6,25 +6,26 @@ import numpy as np
 marker_color = 'rgba(55, 153, 81, 1)'
 line_color = 'rgba(55, 153, 81, 0.4)'
 
+
 def explore_country(country_data):
     sum_begin_int = [0] * (amount_years + 1)
-    sum_middle_int = [0]  * (amount_years + 1)
-    sum_end_int = [0]  * (amount_years + 1)
+    sum_middle_int = [0] * (amount_years + 1)
+    sum_end_int = [0] * (amount_years + 1)
     year_list = []
     yearly = country_data.groupby(['year'])
-    
-    for idx,(year,group) in enumerate(yearly):
+
+    for idx, (year, group) in enumerate(yearly):
         year_list.append(year)
-        for min,max in zip(group['begin_int'], group['end_int']):
+        for min, max in zip(group['begin_int'], group['end_int']):
             sum_begin_int[idx] += min
             sum_end_int[idx] += max
             sum_middle_int[idx] += (min + max) / 2
-    
+
     sum_begin_int = np.array(sum_begin_int)
     sum_middle_int = np.array(sum_middle_int)
     sum_end_int = np.array(sum_end_int)
     year_list = [str(x) for x in year_list]
-    
+
     fig = go.Figure(data=go.Scatter(
         x=year_list,
         y=sum_middle_int,
@@ -36,21 +37,21 @@ def explore_country(country_data):
             color=marker_color,
             array=sum_end_int - sum_middle_int,
             arrayminus=sum_middle_int - sum_begin_int)
-        ))
-    
+    ))
+
     return fig
 
 
 def explore_category(category_data):
     sum_begin_int = [0] * (amount_years + 1)
-    sum_middle_int = [0]  * (amount_years + 1)
-    sum_end_int = [0]  * (amount_years + 1)
+    sum_middle_int = [0] * (amount_years + 1)
+    sum_end_int = [0] * (amount_years + 1)
     year_list = []
     yearly = category_data.groupby(['year'])
-    
-    for idx,(year,group) in enumerate(yearly):
+
+    for idx, (year, group) in enumerate(yearly):
         year_list.append(year)
-        for min,max in zip(group['begin_int'],group['end_int']):
+        for min, max in zip(group['begin_int'], group['end_int']):
             sum_begin_int[idx] += min
             sum_end_int[idx] += max
             sum_middle_int[idx] += (min + max) / 2
@@ -59,7 +60,7 @@ def explore_category(category_data):
     sum_middle_int = np.array(sum_middle_int)
     sum_end_int = np.array(sum_end_int)
     year_list = [str(x) for x in year_list]
-    
+
     fig = go.Figure(data=go.Scatter(
         x=year_list,
         y=sum_middle_int,
@@ -71,7 +72,7 @@ def explore_category(category_data):
             color=marker_color,
             array=sum_end_int - sum_middle_int,
             arrayminus=sum_middle_int - sum_begin_int)
-        ))
+    ))
     return fig
 
 
@@ -92,6 +93,6 @@ def explore_business(business_data):
             color=marker_color,
             array=sum_end_int - sum_middle_int,
             arrayminus=sum_middle_int - sum_begin_int)
-        ))
+    ))
 
     return fig
