@@ -7,24 +7,30 @@ marker_color = 'rgba(55, 153, 81, 1)'
 line_color = 'rgba(55, 153, 81, 0.4)'
 
 
-def explore_country(country_data):
-    sum_begin_int = [0] * (amount_years + 1)
-    sum_middle_int = [0] * (amount_years + 1)
-    sum_end_int = [0] * (amount_years + 1)
+def calc_totals(df):
+    grouped_df = df.groupby(['year'])
+
+    sum_begin_int = np.zeros(amount_years + 1)
+    sum_middle_int = np.zeros(amount_years + 1)
+    sum_end_int = np.zeros(amount_years + 1)
     year_list = []
-    yearly = country_data.groupby(['year'])
 
-    for idx, (year, group) in enumerate(yearly):
-        year_list.append(year)
-        for min, max in zip(group['begin_int'], group['end_int']):
-            sum_begin_int[idx] += min
-            sum_end_int[idx] += max
-            sum_middle_int[idx] += (min + max) / 2
+    for idx, (year, group) in enumerate(grouped_df):
+        year_list.append(str(year))
 
-    sum_begin_int = np.array(sum_begin_int)
-    sum_middle_int = np.array(sum_middle_int)
-    sum_end_int = np.array(sum_end_int)
-    year_list = [str(x) for x in year_list]
+        for min_spending, max_spending in zip(group['begin_int'], group['end_int']):
+            sum_begin_int[idx] += min_spending
+            sum_end_int[idx] += max_spending
+            sum_middle_int[idx] += (min_spending + max_spending) / 2
+
+    return year_list, sum_begin_int, sum_middle_int, sum_end_int
+
+
+def explore_country(country_data):
+    year_list, sum_begin_int, sum_middle_int, sum_end_int = calc_totals(country_data)
+
+    error_plus = sum_end_int - sum_middle_int
+    error_minus = sum_middle_int - sum_begin_int
 
     fig = go.Figure(data=go.Scatter(
         x=year_list,
@@ -35,8 +41,8 @@ def explore_country(country_data):
             type='data',
             symmetric=False,
             color=marker_color,
-            array=sum_end_int - sum_middle_int,
-            arrayminus=sum_middle_int - sum_begin_int),
+            array=error_plus,
+            arrayminus=error_minus),
     ))
 
     fig.update_layout(
@@ -51,23 +57,10 @@ def explore_country(country_data):
 
 
 def explore_category(category_data):
-    sum_begin_int = [0] * (amount_years + 1)
-    sum_middle_int = [0] * (amount_years + 1)
-    sum_end_int = [0] * (amount_years + 1)
-    year_list = []
-    yearly = category_data.groupby(['year'])
+    year_list, sum_begin_int, sum_middle_int, sum_end_int = calc_totals(category_data)
 
-    for idx, (year, group) in enumerate(yearly):
-        year_list.append(year)
-        for min, max in zip(group['begin_int'], group['end_int']):
-            sum_begin_int[idx] += min
-            sum_end_int[idx] += max
-            sum_middle_int[idx] += (min + max) / 2
-
-    sum_begin_int = np.array(sum_begin_int)
-    sum_middle_int = np.array(sum_middle_int)
-    sum_end_int = np.array(sum_end_int)
-    year_list = [str(x) for x in year_list]
+    error_plus = sum_end_int - sum_middle_int
+    error_minus = sum_middle_int - sum_begin_int
 
     fig = go.Figure(data=go.Scatter(
         x=year_list,
@@ -78,8 +71,8 @@ def explore_category(category_data):
             type='data',
             symmetric=False,
             color=marker_color,
-            array=sum_end_int - sum_middle_int,
-            arrayminus=sum_middle_int - sum_begin_int)
+            array=error_plus,
+            arrayminus=error_minus)
     ))
 
     fig.update_layout(
@@ -99,6 +92,9 @@ def explore_business(business_data):
     sum_end_int = np.array(business_data['end_int'])
     year_list = [str(x) for x in list(business_data['year'])]
 
+    error_plus = sum_end_int - sum_middle_int
+    error_minus = sum_middle_int - sum_begin_int
+
     fig = go.Figure(data=go.Scatter(
         x=year_list,
         y=sum_middle_int,
@@ -108,8 +104,8 @@ def explore_business(business_data):
             type='data',
             symmetric=False,
             color=marker_color,
-            array=sum_end_int - sum_middle_int,
-            arrayminus=sum_middle_int - sum_begin_int)
+            array=error_plus,
+            arrayminus=error_minus)
     ))
 
     fig.update_layout(

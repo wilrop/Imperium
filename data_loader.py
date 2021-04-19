@@ -130,7 +130,7 @@ class DataLoader:
         :param country: The country that we want data about.
         :return: The rows in the dataset that contain the country.
         """
-        country_data = self.data.loc[self.data['country head office'] == country]
+        country_data = self.data[self.data['country head office'] == country]
         return country_data
 
     def get_business_data(self, business):
@@ -139,7 +139,7 @@ class DataLoader:
         :param business: The business that we want data about.
         :return: The rows in the dataset that contain the business.
         """
-        business_data = self.data.loc[self.data['organisation name'] == business]
+        business_data = self.data[self.data['organisation name'] == business]
         return business_data
 
     def get_countries_data(self, countries):
@@ -148,8 +148,7 @@ class DataLoader:
         :param countries: The countries that we want data about.
         :return: The rows in the dataset that contain one of these countries.
         """
-        countries_data = self.data.loc[self.data['country head office'].isin(countries)]
-        countries_data = countries_data.groupby(['country head office'], as_index=False).idxmax()
+        countries_data = self.data[self.data['country head office'].isin(countries)]
         return countries_data
 
     def get_categories_data(self, categories):
@@ -159,8 +158,7 @@ class DataLoader:
         :return: The rows in the dataset that contain one of these categories.
         """
         category_ids = map(lambda cat: self.main_categories[cat], categories)
-        categories_data = self.data.loc[self.data['sub_cat'].isin(category_ids)]
-        categories_data = categories_data.groupby(['sub_cat'], as_index=False).idxmax()
+        categories_data = self.data[self.data['sub_cat'].isin(category_ids)]
         return categories_data
 
     def get_businesses_data(self, businesses):
@@ -169,8 +167,7 @@ class DataLoader:
         :param businesses: The businesses that we want data about.
         :return: The rows in the dataset that contain one of these businesses.
         """
-        businesses_data = self.data.loc[self.data['organisation name'].isin(businesses)]
-        businesses_data = businesses_data.groupby(['organisation name'], as_index=False).idxmax()
+        businesses_data = self.data[self.data['organisation name'].isin(businesses)]
         return businesses_data
 
     def get_subcategory_data(self, category, subcategory):
@@ -182,8 +179,8 @@ class DataLoader:
         """
         category_nr = string_to_int_category[category]
         subcategory_nr = string_to_int_subcategory[subcategory]
-        category_data = self.data.loc[self.data['main_cat'] == category_nr]
-        subcategory_data = category_data.loc[category_data['sub_cat'] == subcategory_nr]
+        category_data = self.data[self.data['main_cat'] == category_nr]
+        subcategory_data = category_data[category_data['sub_cat'] == subcategory_nr]
 
         return subcategory_data
 

@@ -67,7 +67,6 @@ def run():
         if not countries_data.empty:
             countries_plot = comparer_plots.compare_countries(countries_data)
             st.write(countries_plot)
-        # TODO: decide on visualisation
 
         st.markdown(md_templates.compare_categories_template)
         categories_lst = st.multiselect("Select categories", categories)
@@ -75,7 +74,6 @@ def run():
         if not categories_data.empty:
             categories_plot = comparer_plots.compare_categories(categories_data)
             st.write(categories_plot)
-        # TODO: decide on visualisation
 
         st.markdown(md_templates.compare_businesses_template)
         businesses_lst = st.multiselect("Select businesses", businesses)
@@ -83,7 +81,7 @@ def run():
         if not businesses_data.empty:
             businesses_plot = comparer_plots.compare_businesses(businesses_data)
             st.write(businesses_plot)
-        # TODO: decide on visualisation
+
     elif view_selectbox == 'View raw data':
         st.markdown(md_templates.data_explorer_template)
         st.dataframe(data.data)
