@@ -12,7 +12,7 @@ import comparer_plots
 from data_loader import DataLoader
 
 
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+external_stylesheets = ['https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css']
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 data = DataLoader()  # Initialise the data loader.
@@ -81,12 +81,108 @@ def update_country_comparer(countries):
 
 
 # App layout
+
+
 app.layout = html.Div([
-    dcc.Markdown(children=md_templates.start_template),
-    dcc.Graph(
-        id='world-map',
-        figure=world_map
-    ),
+    html.Div([
+        html.Div([
+            html.Div([
+                html.Div([
+                    html.Div([
+
+                        dcc.Markdown(children=md_templates.start_template,className='title is-6'),
+                        dcc.Graph(id='world-map',figure=world_map)
+
+                    ],className='content')
+                ],className='card-content')
+            ],className='card')
+        ],className='column is-two-thirds'),
+        html.Div([
+             html.Div([
+                html.Div([
+                    html.Div([
+
+                        dcc.Markdown(children=md_templates.explore_template,className='title is-6'),
+                        dcc.Markdown(children=md_templates.explore_countries_template),
+                        dcc.Dropdown(id='countries-dropdown-explore',options=countries),
+                        dcc.Graph(id='country-explore-plot')
+
+                    ],className='content')
+                ],className='card-content')
+            ],className='card')
+        ],className='column'),
+    ],className='columns'),
+
+    html.Div([
+        html.Div([
+             html.Div([
+                html.Div([
+                    html.Div([
+
+                        dcc.Markdown(children=md_templates.explore_categories_template,className='title is-6'),
+                        dcc.Markdown(children=md_templates.explore_categories_template),
+                        dcc.Dropdown(id='main-categories-dropdown-explore',options=categories),
+                        dcc.Dropdown(id='sub-categories-dropdown-explore'),
+                        dcc.Graph(id='category-explore-plot')
+
+                    ],className='content')
+                ],className='card-content')
+            ],className='card')
+        ],className='column'),
+        html.Div([
+             html.Div([
+                html.Div([
+                    html.Div([
+
+                        dcc.Markdown(children=md_templates.explore_businesses_template,className='title is-6'),
+                        dcc.Dropdown(id='businesses-dropdown-explore',options=businesses),
+                        dcc.Graph(id='business-explore-plot')
+
+                    ],className='content')
+                ],className='card-content')
+            ],className='card')
+        ],className='column'),
+        html.Div([
+             html.Div([
+                html.Div([
+                    html.Div([
+                        
+                        dcc.Markdown(children=md_templates.compare_countries_template,className='title is-6'),
+                        dcc.Markdown(children=md_templates.compare_countries_template),
+                        dcc.Dropdown(id='countries-dropdown-compare',options=countries,multi=True),
+                        dcc.Graph(id='countries-compare-plot')
+
+                    ],className='content')
+                ],className='card-content')
+            ],className='card')
+        ],className='column'),
+    ],className='columns'),
+
+],className="container is-fluid")
+
+'''
+app.layout = html.Div([
+        html.Div([
+            html.Div([
+                    html.Div([
+                    dcc.Graph(
+                        id='world-map',
+                        figure=world_map)
+                        ],className='card-content')
+                ],className='card'),
+            ],className='column is-narrow'),
+        html.Div([html.Div([
+            dcc.Markdown(children=md_templates.compare_template),
+                html.Div([
+                    dcc.Markdown(children=md_templates.compare_countries_template),
+                    dcc.Dropdown(
+                        id='countries-dropdown-compare',
+                        options=countries,
+                        multi=True
+                    ),
+                    dcc.Graph(id='countries-compare-plot')
+        ])],className='card')],className='column')
+    ,
     html.Div([
         dcc.Markdown(children=md_templates.explore_template),
         html.Div([
@@ -122,15 +218,16 @@ app.layout = html.Div([
         html.Div([
             dcc.Markdown(children=md_templates.compare_countries_template),
             dcc.Dropdown(
-                id='countries-dropdown-compare',
+                id='countries-dropdown-compare-test',
                 options=countries,
                 multi=True
             ),
-            dcc.Graph(id='countries-compare-plot')
+            dcc.Graph(id='countries-compare-plot-test')
         ]),
     ])
 
-])
+],className='columns is-multiline is-centered')
+'''
 '''
 
     # Sidebar elements

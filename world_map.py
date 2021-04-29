@@ -11,10 +11,9 @@ def map_plot(iso3_codes, countries_bussines_amount):
                         color="spending",
                         scope="world",
                         labels={'spending': 'Amount of companies'},
-                        width=1000,
+                        height=600,
                         hover_name=df['spending'],
                         hover_data=['spending'],
-                        height=600,
                         custom_data=['spending']
                         )
 

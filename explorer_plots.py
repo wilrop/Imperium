@@ -42,10 +42,11 @@ def explore_country(country_data):
             symmetric=False,
             color=marker_color,
             array=error_plus,
-            arrayminus=error_minus),
+            arrayminus=error_minus)
     ))
 
     fig.update_layout(
+        template='plotly_white',
     xaxis=dict(
         rangeslider=dict(
             visible=True
@@ -76,6 +77,7 @@ def explore_category(category_data):
     ))
 
     fig.update_layout(
+        template='plotly_white',
     xaxis=dict(
         rangeslider=dict(
             visible=True
@@ -109,6 +111,7 @@ def explore_business(business_data):
     ))
 
     fig.update_layout(
+        template='plotly_white',
     xaxis=dict(
         rangeslider=dict(
             visible=True
