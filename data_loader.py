@@ -223,7 +223,6 @@ class DataLoader:
         This method gets all the country names and transforms them to their respective ISO 3 code, together with the amount of
         organisations per country
         """
-        countries_iso = []
         countries_bussines_amount = []
 
         for country in self.countries_lst:
