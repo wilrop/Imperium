@@ -20,9 +20,12 @@ def calc_totals(grouped_df, group_str):
 def compare_countries(countries_data):
     countries_data_grouped = countries_data.groupby(['country head office'])
     result_df = calc_totals(countries_data_grouped, 'Country')
-
-    fig = px.scatter(result_df, x="lobbyists (FTE)", y="# of meetings", size="Approximated spending",
-                     color="Country", hover_name="Country", log_x=True, size_max=60)
+    if result_df.empty:
+        fig = px.scatter(result_df, x="lobbyists (FTE)", y="# of meetings", size="Approximated spending",
+                         hover_name="Country", log_x=True, size_max=60)
+    else:
+        fig = px.scatter(result_df, x="lobbyists (FTE)", y="# of meetings", size="Approximated spending",
+                         color="Country", hover_name="Country", log_x=True, size_max=60)
     return fig
 
 

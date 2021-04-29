@@ -48,7 +48,8 @@ class DataLoader:
                 'Other sub-national public authorities': 2
             }
         }
-
+        self.columns = ['organisation name', 'country head office', 'lobbying costs', 'EP passes', 'lobbyists (FTE)',
+                        '# of meetings', 'registered date', 'begin_int', 'end_int', 'year', 'main_cat', 'sub_cat']
         self.main_categories_lst = self.load_main_categories()
         self.sub_categories_lst = self.load_sub_categories()
         self.businesses_lst = self.load_businesses()
@@ -59,7 +60,9 @@ class DataLoader:
         This method loads all main categories.
         :return: A list containing all main categories.
         """
-        return self.main_categories.keys()
+        main_categories = self.main_categories.keys()
+        list(main_categories).sort()
+        return main_categories
 
     def load_sub_categories(self):
         """
@@ -76,23 +79,38 @@ class DataLoader:
         This method will load all distinct businesses in the dataset into a list.
         :return: A list of all businesses.
         """
-        all_businesses = self.data['organisation name']
-        return all_businesses.drop_duplicates().to_list()
+        businesses = self.data['organisation name']
+        businesses = businesses.drop_duplicates().to_list()
+        businesses.sort()
+        return businesses
 
     def load_countries(self):
         """
         This method will load all distinct countries in the dataset into a list.
         :return: A list of all countries.
         """
-        all_countries = self.data['country head office']
-        return all_countries.drop_duplicates().to_list()
+        countries = self.data['country head office']
+        countries = countries.dropna()
+        countries = countries.drop_duplicates().to_list()
+
+        # Some names were written wrong, so some hard coded solution to rename those countries.
+        countries[countries.index('Afganistan')] = 'Afghanistan'
+        countries.remove('Netherlands Antilles')
+        countries[countries.index('Gibralter')] = 'Gibraltar'
+        countries.sort()
+
+        return countries
 
     def get_main_categories(self):
         """
         This method gets all main categories.
         :return: A tuple of all main categories.
         """
-        return tuple(self.main_categories_lst)
+        categories = []
+        for category in self.main_categories_lst:
+            category_dict = dict(label=category, value=category)
+            categories.append(category_dict)
+        return categories
 
     def get_sub_categories(self):
         """
@@ -108,21 +126,35 @@ class DataLoader:
         :return: A tuple of all categories that fall under this main category.
         """
         id = self.main_categories[category]
-        return tuple(self.sub_categories[id].keys())
+        sub_categories_lst = self.sub_categories[id].keys()
+        sub_categories = []
+        for sub_category in sub_categories_lst:
+            sub_category_dict = dict(label=sub_category, value=sub_category)
+            sub_categories.append(sub_category_dict)
+
+        return sub_categories
 
     def get_businesses(self):
         """
         This method gets all the businesses in the dataset.
         :return: A tuple of all distinct businesses.
         """
-        return tuple(self.businesses_lst)
+        businesses = []
+        for business in self.businesses_lst:
+            business_dict = dict(label=business, value=business)
+            businesses.append(business_dict)
+        return businesses
 
     def get_countries(self):
         """
         This method gets all the countries in the dataset.
-        :return: A tuple of all distinct countries.
+        :return: A dictionary of all distinct countries with key = value.
         """
-        return tuple(self.countries_lst)
+        countries = []
+        for country in self.countries_lst:
+            country_dict = dict(label=country, value=country)
+            countries.append(country_dict)
+        return countries
 
     def get_country_data(self, country):
         """
@@ -148,8 +180,11 @@ class DataLoader:
         :param countries: The countries that we want data about.
         :return: The rows in the dataset that contain one of these countries.
         """
-        countries_data = self.data[self.data['country head office'].isin(countries)]
-        return countries_data
+        if countries:
+            countries_data = self.data[self.data['country head office'].isin(countries)]
+            return countries_data
+        else:
+            return pd.DataFrame(columns=self.columns)
 
     def get_categories_data(self, categories):
         """
@@ -179,29 +214,21 @@ class DataLoader:
         """
         category_nr = string_to_int_category[category]
         subcategory_nr = string_to_int_subcategory[subcategory]
-        category_data = self.data[self.data['main_cat'] == category_nr]
-        subcategory_data = category_data[category_data['sub_cat'] == subcategory_nr]
+        data = self.data[(self.data['main_cat'] == category_nr) & (self.data['sub_cat'] == subcategory_nr)]
 
-        return subcategory_data
+        return data
 
     def get_country_amount_of_companies(self):
         """
         This method gets all the country names and transforms them to their respective ISO 3 code, together with the amount of
         organisations per country
         """
-        countries = list(self.get_countries())
         countries_iso = []
         countries_bussines_amount = []
 
-        # Some names were writting wrong, so some hard coded solution to rename those countries.
-        countries[countries.index('Afganistan')] = 'Afghanistan'
-        countries.remove('Netherlands Antilles')
-        countries[countries.index('Gibralter')] = 'Gibraltar'
-        countries = [country for country in countries if str(country) != 'nan']
-
-        for country in countries:
+        for country in self.countries_lst:
             df_country = self.get_country_data(country)
             countries_bussines_amount.append(len(df_country))
 
-        iso3_codes = coco.convert(names=countries, to='ISO3')
+        iso3_codes = coco.convert(names=self.countries_lst, to='ISO3')
         return iso3_codes, countries_bussines_amount

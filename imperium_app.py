@@ -1,5 +1,9 @@
 import argparse
-import streamlit as st
+import dash
+import dash_core_components as dcc
+import dash_html_components as html
+from dash.exceptions import PreventUpdate
+import plotly.express as px
 
 import md_templates
 import world_map
@@ -8,20 +12,126 @@ import comparer_plots
 from data_loader import DataLoader
 
 
-def run():
-    """
-    This is the main function that runs our streamlit app.
-    :return: /
-    """
-    data = DataLoader()  # Initialise the data loader.
+external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
-    countries = data.get_countries()
-    categories = data.get_main_categories()
-    sub_categories = data.get_sub_categories()
-    businesses = data.get_businesses()
+app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+data = DataLoader()  # Initialise the data loader.
 
-    # Main template
-    st.markdown(md_templates.start_template)
+# Load static data
+countries = data.get_countries()
+categories = data.get_main_categories()
+sub_categories = data.get_sub_categories()
+businesses = data.get_businesses()
+
+# Load necessary data and plot for world map
+iso3_codes, countries_business_amount = data.get_country_amount_of_companies()
+world_map = world_map.map_plot(iso3_codes, countries_business_amount)
+
+
+# Callback for country explorer plots
+@app.callback(dash.dependencies.Output('country-explore-plot', 'figure'),
+              [dash.dependencies.Input('countries-dropdown-explore', 'value')])
+def update_country_explorer(country):
+    country_data = data.get_country_data(country)
+    country_plot = explorer_plots.explore_country(country_data)
+    return country_plot
+
+
+# Callback for updating main category
+@app.callback(dash.dependencies.Output('sub-categories-dropdown-explore', 'options'),
+              [dash.dependencies.Input('main-categories-dropdown-explore', 'value')])
+def update_main_category(category):
+    if not category:
+        raise PreventUpdate
+    sub_categories = data.get_sub_categories_for_main(category)
+    return sub_categories
+
+
+# Callback for category explorer plots
+@app.callback(dash.dependencies.Output('category-explore-plot', 'figure'),
+              [dash.dependencies.Input('main-categories-dropdown-explore', 'value'),
+               dash.dependencies.Input('sub-categories-dropdown-explore', 'value')])
+def update_category_explorer(main_category, sub_category):
+    if not (main_category and sub_category):
+        category_data = data.get_country_data(None)  # This data will the always be empty
+        category_plot = explorer_plots.explore_category(category_data)
+        return category_plot
+    else:
+        category_data = data.get_subcategory_data(main_category, sub_category)
+        category_plot = explorer_plots.explore_category(category_data)
+        return category_plot
+
+
+# Callback for business explorer plots
+@app.callback(dash.dependencies.Output('business-explore-plot', 'figure'),
+              [dash.dependencies.Input('businesses-dropdown-explore', 'value')])
+def update_business_explorer(business):
+    business_data = data.get_business_data(business)
+    business_plot = explorer_plots.explore_business(business_data)
+    return business_plot
+
+
+# Callback for country comparer plots
+@app.callback(dash.dependencies.Output('countries-compare-plot', 'figure'),
+              [dash.dependencies.Input('countries-dropdown-compare', 'value')])
+def update_country_comparer(countries):
+    countries_data = data.get_countries_data(countries)
+    countries_plot = comparer_plots.compare_countries(countries_data)
+    return countries_plot
+
+
+# App layout
+app.layout = html.Div([
+    dcc.Markdown(children=md_templates.start_template),
+    dcc.Graph(
+        id='world-map',
+        figure=world_map
+    ),
+    html.Div([
+        dcc.Markdown(children=md_templates.explore_template),
+        html.Div([
+            dcc.Markdown(children=md_templates.explore_countries_template),
+            dcc.Dropdown(
+                id='countries-dropdown-explore',
+                options=countries
+            ),
+            dcc.Graph(id='country-explore-plot')
+        ]),
+        html.Div([
+            dcc.Markdown(children=md_templates.explore_categories_template),
+            dcc.Dropdown(
+                id='main-categories-dropdown-explore',
+                options=categories
+            ),
+            dcc.Dropdown(
+                id='sub-categories-dropdown-explore',
+            ),
+            dcc.Graph(id='category-explore-plot')
+        ]),
+        html.Div([
+            dcc.Markdown(children=md_templates.explore_businesses_template),
+            dcc.Dropdown(
+                id='businesses-dropdown-explore',
+                options=businesses
+            ),
+            dcc.Graph(id='business-explore-plot')
+        ]),
+    ]),
+    html.Div([
+        dcc.Markdown(children=md_templates.compare_template),
+        html.Div([
+            dcc.Markdown(children=md_templates.compare_countries_template),
+            dcc.Dropdown(
+                id='countries-dropdown-compare',
+                options=countries,
+                multi=True
+            ),
+            dcc.Graph(id='countries-compare-plot')
+        ]),
+    ])
+
+])
+'''
 
     # Sidebar elements
     view_selectbox = st.sidebar.selectbox(
@@ -84,10 +194,10 @@ def run():
 
     elif view_selectbox == 'View raw data':
         st.markdown(md_templates.data_explorer_template)
-        st.dataframe(data.data)
+        st.dataframe(data.data)'''
 
 
-def _max_width_():
+'''def _max_width_():
     """
     Streamlit will open plotly graphs in a small window, this will make it fullscreen.
     :return: /
@@ -102,8 +212,8 @@ def _max_width_():
     </style>    
     """,
         unsafe_allow_html=True,
-    )
+    )'''
 
 
 if __name__ == "__main__":
-    run()
+    app.run_server(debug=True)
