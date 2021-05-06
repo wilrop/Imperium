@@ -39,7 +39,7 @@ all_file_name = './data/' + 'data_all.csv'
 # File with all the data (with categories)
 cat_file_name = './data/' + 'data_cat.csv'
 
-# Column types for the dataframe
+# Column types for the initial dataframe
 columns = {
     organisation_name_str: str,
     country_head_office_str: str,
@@ -130,7 +130,7 @@ string_to_int_category = {
     'Organisations representing local, regional and municipal authorities, other public or mixed entities, etc.': 6
 }
 
-# Get the number of availble main categories in the data
+# Get the number of available main categories in the data
 num_categories = len(main_categories.keys())
 
 
@@ -208,8 +208,8 @@ def read_files(columns):
                     df[begin_interval_name][index] = begin_int
                     df[end_interval_name][index] = end_int
                 df[year_column_name] = i
-                df[main_cat_column_name] = j
-                df[sub_cat_column_name] = key
+                df[main_cat_column_name] = main_cat_str
+                df[sub_cat_column_name] = sub_categories[j][key]
                 dataframes_cat.append(df)
 
     return dataframes, dataframes_cat

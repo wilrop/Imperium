@@ -21,9 +21,9 @@ def compare_data(data, view):
     if view == 'Country':
         data_grouped = data.groupby(['country head office'])
         result_df = calc_totals(data_grouped, 'Country')
-    elif view == 'Business':
-        data_grouped = data.groupby(['orgaisation name'])
-        result_df = calc_totals(data_grouped, 'Business')
+    elif view == 'Organisation':
+        data_grouped = data.groupby(['organisation name'])
+        result_df = calc_totals(data_grouped, 'Organisation')
     else:
         data_grouped = data.groupby(['sub_cat'])
         result_df = calc_totals(data_grouped, 'Category')

@@ -1,8 +1,5 @@
-import itertools
 import pandas as pd
 import country_converter as coco
-import numpy as np
-from preprocessing import string_to_int_subcategory, string_to_int_category
 
 
 class DataLoader:
@@ -12,78 +9,33 @@ class DataLoader:
 
     def __init__(self, file='data/data_cat.csv'):
         self.data = pd.read_csv(file)
-        self.main_categories = {
-            'Professional consultancies/law firms/self-employed consultants': 1,
-            'In-house lobbyists and trade/professional associations': 2,
-            'Non-governmental organisations': 3,
-            'Think tanks, research and academic institutions': 4,
-            'Organisations representing churches and religious communities': 5,
-            'Organisations representing local, regional and municipal authorities, other public or mixed entities, etc.': 6
-        }
-
-        self.sub_categories = {
-            1: {
-                'Professional consultancies': 1,
-                'Law firms': 2,
-                'Self-employed consultants': 3
-            },
-            2: {
-                'Companies & groups': 1,
-                'Trade and business organisations': 2,
-                'Trade unions and professional associations': 3,
-                'Other in house lobbyists': 4
-            },
-            3: {
-                'Non-governmental organisations, platforms and networks and similar': 1
-            },
-            4: {
-                'Think tanks and research institutions': 1,
-                'Academic institutions': 2
-            },
-            5: {
-                'Organisations representing churches and religious communities': 1
-            },
-            6: {
-                'Regional structures': 1,
-                'Other sub-national public authorities': 2
-            }
-        }
         self.columns = ['organisation name', 'country head office', 'lobbying costs', 'EP passes', 'lobbyists (FTE)',
                         '# of meetings', 'registered date', 'begin_int', 'end_int', 'year', 'main_cat', 'sub_cat']
-        self.main_categories_lst = self.load_main_categories()
-        self.sub_categories_lst = self.load_sub_categories()
-        self.businesses_lst = self.load_businesses()
+        self.main_categories_lst = ['Professional consultancies/law firms/self-employed consultants',
+                                    'In-house lobbyists and trade/professional associations',
+                                    'Non-governmental organisations',
+                                    'Think tanks, research and academic institutions',
+                                    'Organisations representing churches and religious communities',
+                                    'Organisations representing local, regional and municipal authorities, other public or mixed entities, etc.']
+        self.sub_categories_lst = ['Professional consultancies', 'Law firms', 'Self-employed consultants',
+                                   'Companies & groups', 'Trade and business organisations',
+                                   'Trade unions and professional associations', 'Other in house lobbyists',
+                                   'Non-governmental organisations, platforms and networks and similar',
+                                   'Think tanks and research institutions', 'Academic institutions',
+                                   'Organisations representing churches and religious communities',
+                                   'Regional structures', 'Other sub-national public authorities']
+        self.organisations_lst = self.load_organisations()
         self.countries_lst = self.load_countries()
 
-    def load_main_categories(self):
+    def load_organisations(self):
         """
-        This method loads all main categories.
-        :return: A list containing all main categories.
+        This method will load all distinct organisations in the dataset into a list.
+        :return: A list of all organisations.
         """
-        main_categories = self.main_categories.keys()
-        list(main_categories).sort()
-        return main_categories
-
-    def load_sub_categories(self):
-        """
-        This method gets all sub categories.
-        :return: A list containing all sub categories.
-        """
-        sub_categories = []
-        for lst in self.sub_categories.values():
-            for sub_category in lst.keys():
-                sub_categories.append(sub_category)
-        return sub_categories
-
-    def load_businesses(self):
-        """
-        This method will load all distinct businesses in the dataset into a list.
-        :return: A list of all businesses.
-        """
-        businesses = self.data['organisation name']
-        businesses = businesses.drop_duplicates().to_list()
-        businesses.sort()
-        return businesses
+        organisations = self.data['organisation name']
+        organisations = organisations.drop_duplicates().to_list()
+        organisations.sort()
+        return organisations
 
     def load_countries(self):
         """
@@ -124,31 +76,17 @@ class DataLoader:
             sub_categories.append(sub_category_dict)
         return sub_categories
 
-    def get_sub_categories_for_main(self, category):
+    def get_organisations(self):
         """
-        This method gets all sub categories for a specific main category.
-        :param category: The main category.
-        :return: A tuple of all categories that fall under this main category.
+        This method gets all the organisations in the dataset.
+        :return: A list of dictionaries with a key label and a key value that both have as value the name of an
+        origanisation.
         """
-        id = self.main_categories[category]
-        sub_categories_lst = self.sub_categories[id].keys()
-        sub_categories = []
-        for sub_category in sub_categories_lst:
-            sub_category_dict = dict(label=sub_category, value=sub_category)
-            sub_categories.append(sub_category_dict)
-
-        return sub_categories
-
-    def get_businesses(self):
-        """
-        This method gets all the businesses in the dataset.
-        :return: A tuple of all distinct businesses.
-        """
-        businesses = []
-        for business in self.businesses_lst:
-            business_dict = dict(label=business, value=business)
-            businesses.append(business_dict)
-        return businesses
+        organisations = []
+        for organisation in self.organisations_lst:
+            organisation_dict = dict(label=organisation, value=organisation)
+            organisations.append(organisation_dict)
+        return organisations
 
     def get_countries(self):
         """
@@ -160,24 +98,6 @@ class DataLoader:
             country_dict = dict(label=country, value=country)
             countries.append(country_dict)
         return countries
-
-    def get_country_data(self, country):
-        """
-        This method returns all available data about a specific country.
-        :param country: The country that we want data about.
-        :return: The rows in the dataset that contain the country.
-        """
-        country_data = self.data[self.data['country head office'] == country]
-        return country_data
-
-    def get_business_data(self, business):
-        """
-        This method gets all available data about a specific business.
-        :param business: The business that we want data about.
-        :return: The rows in the dataset that contain the business.
-        """
-        business_data = self.data[self.data['organisation name'] == business]
-        return business_data
 
     def get_countries_data(self, countries):
         """
@@ -191,51 +111,40 @@ class DataLoader:
         else:
             return pd.DataFrame(columns=self.columns)
 
-    def get_categories_data(self, categories):
+    def get_sub_categories_data(self, categories):
         """
         This method gets all available data about a list of categories.
         :param categories: The categories that we want data about.
         :return: The rows in the dataset that contain one of these categories.
         """
-        category_ids = map(lambda cat: self.main_categories[cat], categories)
-        categories_data = self.data[self.data['sub_cat'].isin(category_ids)]
-        return categories_data
+        if categories:
+            categories_data = self.data[self.data['sub_cat'].isin(categories)]
+            return categories_data
+        else:
+            return pd.DataFrame(columns=self.columns)
 
-    def get_businesses_data(self, businesses):
+    def get_organisations_data(self, organisations):
         """
-        This method gets all available data about a list of businesses.
-        :param businesses: The businesses that we want data about.
-        :return: The rows in the dataset that contain one of these businesses.
+        This method gets all available data about a list of organisations.
+        :param organisations: The organisations that we want data about.
+        :return: The rows in the dataset that contain one of these organisations.
         """
-        businesses_data = self.data[self.data['organisation name'].isin(businesses)]
-        return businesses_data
+        if organisations:
+            organisations_data = self.data[self.data['organisation name'].isin(organisations)]
+            return organisations_data
+        else:
+            return pd.DataFrame(columns=self.columns)
 
-    def get_sub_categories_data(self, sub_categories):
-
-
-    def get_subcategory_data(self, category, subcategory):
+    def get_country_amount_of_organisations(self):
         """
-        This method gets all available data about a list of subcategories.
-        :param category: The main category.
-        :param subcategory: The sub category.
-        :return: The rows in the dataset that contain one of these subcategories.
+        This method gets all the country names and transforms them to their respective ISO 3 code, together with the
+        amount of organisations per country
         """
-        category_nr = string_to_int_category[category]
-        subcategory_nr = string_to_int_subcategory[subcategory]
-        data = self.data[(self.data['main_cat'] == category_nr) & (self.data['sub_cat'] == subcategory_nr)]
-
-        return data
-
-    def get_country_amount_of_companies(self):
-        """
-        This method gets all the country names and transforms them to their respective ISO 3 code, together with the amount of
-        organisations per country
-        """
-        countries_bussines_amount = []
+        countries_organisations_amount = []
 
         for country in self.countries_lst:
-            df_country = self.get_country_data(country)
-            countries_bussines_amount.append(len(df_country))
+            df_country = self.get_countries_data([country])
+            countries_organisations_amount.append(len(df_country))
 
         iso3_codes = coco.convert(names=self.countries_lst, to='ISO3')
-        return iso3_codes, countries_bussines_amount,self.countries_lst
+        return iso3_codes, countries_organisations_amount, self.countries_lst
