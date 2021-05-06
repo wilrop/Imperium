@@ -17,31 +17,22 @@ def calc_totals(grouped_df, group_str):
     return df
 
 
-def compare_countries(countries_data):
-    countries_data_grouped = countries_data.groupby(['country head office'])
-    result_df = calc_totals(countries_data_grouped, 'Country')
+def compare_data(data, view):
+    if view == 'Country':
+        data_grouped = data.groupby(['country head office'])
+        result_df = calc_totals(data_grouped, 'Country')
+    elif view == 'Business':
+        data_grouped = data.groupby(['orgaisation name'])
+        result_df = calc_totals(data_grouped, 'Business')
+    else:
+        data_grouped = data.groupby(['sub_cat'])
+        result_df = calc_totals(data_grouped, 'Category')
+
     if result_df.empty:
         fig = px.scatter(result_df, x="lobbyists (FTE)", y="# of meetings", size="Approximated spending",
                          hover_name="Country", log_x=True, size_max=60)
     else:
         fig = px.scatter(result_df, x="lobbyists (FTE)", y="# of meetings", size="Approximated spending",
-                         color="Country", hover_name="Country", log_x=True, size_max=60)
-    return fig
+                     color=view, hover_name=view, log_x=True, size_max=60)
 
-
-def compare_categories(categories_data):
-    categories_data_grouped = categories_data.groupby(['main_cat'])
-    result_df = calc_totals(categories_data_grouped, 'Category')
-
-    fig = px.scatter(result_df, x="lobbyists (FTE)", y="# of meetings", size="Approximated spending",
-                     color="Category", hover_name="Category", log_x=True, size_max=60)
-    return fig
-
-
-def compare_businesses(businesses_data):
-    businesses_data_grouped = businesses_data.groupby(['organisation name'])
-    result_df = calc_totals(businesses_data_grouped, 'Business')
-
-    fig = px.scatter(result_df, x="lobbyists (FTE)", y="# of meetings", size="Approximated spending",
-                     color="Business", hover_name="Business", log_x=True, size_max=60)
     return fig

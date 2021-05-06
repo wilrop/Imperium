@@ -210,6 +210,9 @@ class DataLoader:
         businesses_data = self.data[self.data['organisation name'].isin(businesses)]
         return businesses_data
 
+    def get_sub_categories_data(self, sub_categories):
+
+
     def get_subcategory_data(self, category, subcategory):
         """
         This method gets all available data about a list of subcategories.

@@ -29,10 +29,11 @@ iso3_codes, countries_business_amount,countries_list = data.get_country_amount_o
 world_map = world_plot.map_plot(iso3_codes, countries_business_amount,countries_list)
 
 
+# Load current view
+curr_view = 'Country'
 
-@app.callback(dash.dependencies.Output('world-map', 'figure'),
-    [dash.dependencies.Input('world-map', 'clickData')]
-)
+@app.callback(Output('world-map', 'figure'),
+              [Input('world-map', 'clickData')])
 def update_map(click_data):
     if click_data != None:
         country_name = click_data['points'][0]['hovertext']
@@ -95,6 +96,20 @@ def update_country_comparer(countries):
 
 '''
 
+# Callback for comparer plots
+@app.callback(Output('compare-plot', 'figure'),
+              [Input('compare-dropdown', 'value')])
+def update_compare_plot(items):
+    if curr_view == 'Country':
+        df = data.get_countries_data(items)
+    elif curr_view == 'Category':
+        df = data.get_sub_categories_data(items)
+    else:
+        df = data.get_businesses_data(items)
+
+    fig = comparer_plots.compare_data(df, curr_view)
+    return fig
+
 
 # Callback to update the values in the compare dropdown
 @app.callback(Output('compare-dropdown', 'options'),
@@ -106,12 +121,16 @@ def update_compare_dropdown(country, business, sub_category):
     ctx = dash.callback_context
 
     if ctx.triggered:
+        global curr_view
         dropdown = ctx.triggered[0]['prop_id'].split('.')[0]
         if dropdown == 'countries-dropdown':
+            curr_view = 'Country'
             return countries, [country]
         elif dropdown == 'businesses-dropdown':
+            curr_view = 'Business'
             return businesses, [business]
         else:
+            curr_view = 'Category'
             return sub_categories, [sub_category]
     else:
         return countries, []
@@ -125,10 +144,10 @@ app.layout = html.Div([
             dcc.Dropdown(id='countries-dropdown', options=countries),
         ], className='column is-one-third'),
         html.Div([
-            dcc.Dropdown(id='businesses-dropdown', options=businesses, optionHeight=60),
+            dcc.Dropdown(id='sub-categories-dropdown', options=sub_categories)
         ], className='column'),
         html.Div([
-            dcc.Dropdown(id='sub-categories-dropdown', options=sub_categories)
+            dcc.Dropdown(id='businesses-dropdown', options=businesses, optionHeight=60),
         ], className='column')
     ], className='columns'),
     html.Div([
