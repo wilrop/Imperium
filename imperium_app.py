@@ -80,7 +80,6 @@ def update_explore_dropdown(country, organisation, sub_category):
             business_plot = explorer_plots.explore_business(business_data)
             return business_plot
         else:
-            main_category = subcategory_to_main[sub_category]
             category_data = data.get_sub_categories_data([sub_category])
             category_plot = explorer_plots.explore_category(category_data)
             return category_plot

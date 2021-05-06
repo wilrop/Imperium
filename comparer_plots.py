@@ -12,7 +12,7 @@ def calc_totals(grouped_df, group_str):
                 meetings = year_group['# of meetings'].sum()
                 ep_passes = year_group['EP passes'].sum()
                 mid_point = year_group['end_int'].sum() - year_group['begin_int'].sum()
-                results.append([by, str(year), lobbyists, meetings, ep_passes, mid_point])
+                results.append([by, year, lobbyists, meetings, ep_passes, mid_point])
 
     columns = [group_str, 'year', 'lobbyists (FTE)', '# of meetings', 'EP passes', 'Approximated spending']
     df = pd.DataFrame(results, columns=columns)
@@ -34,13 +34,22 @@ def compare_data(data, view):
         fig = px.scatter(result_df, x="lobbyists (FTE)", y="# of meetings", size="Approximated spending",
                          hover_name=view, animation_group=view, log_x=True, size_max=60, template='plotly_white')
     else:
-        spacing = 60
-        min_x = max(0.1, result_df['lobbyists (FTE)'].min() - spacing*2)
-        max_x = result_df['lobbyists (FTE)'].max() + spacing*2
-        min_y = result_df['# of meetings'].min() - spacing*2
-        max_y = result_df['# of meetings'].max() + spacing*2
+        size_max = 50
+        padding = 0.2
+        min_x = result_df['lobbyists (FTE)'].min()
+        max_x = result_df['lobbyists (FTE)'].max()
+        min_y = result_df['# of meetings'].min()
+        max_y = result_df['# of meetings'].max()
+        width = abs(max_x - min_x)
+        height = abs(max_y - min_y)
+        min_x = min_x - padding * width
+        max_x = max_x + padding * width
+        min_y = min_y - padding * height
+        max_y = max_y + padding * height
         fig = px.scatter(result_df, x="lobbyists (FTE)", y="# of meetings", size="Approximated spending",
-                         color=view, hover_name=view, animation_frame='year', animation_group=view, log_x=True,
-                         size_max=spacing, template='plotly_white')
-
+                         color=view, hover_name=view, animation_frame='year', range_x=[min_x, max_x],
+                         range_y=[min_y, max_y], size_max=size_max, template='plotly_white')
+        fig.update_layout(transition={'duration': 1000})
+        fig.layout.updatemenus[0].buttons[0].args[1]['frame']['duration'] = 1000
+        fig.layout.updatemenus[0].buttons[0].args[1]['transition']['duration'] = 5000
     return fig
