@@ -46,6 +46,7 @@ def update_map(click_data):
               Output('country-here', 'children'),
               Output('passes-here', 'children'),
               Output('country-here-2', 'children'),
+              Output('country-here-3', 'children'),
               [Input('countries-dropdown', 'value')])
 def update_companies_here(value):
     if value is not None:
@@ -57,7 +58,7 @@ def update_companies_here(value):
         company_amount = "No country selected"
         ep_amount = "No country selected"
         value = ""
-    return company_amount, value, ep_amount, value
+    return company_amount, value, ep_amount, value, value[:-4]
 
 
 # Callback to update the values in the compare dropdown
@@ -130,22 +131,62 @@ def update_compare_dropdown(country, organisation, sub_category):
 
 
 # App layout
-app.layout = html.Div([
-    dcc.Markdown(children=md_templates.start_template),
+
+
+nav = html.Nav([
+    html.Div([
+        html.A([
+            dcc.Markdown(children="IMPERIUM", className='title is-5 center'),
+
+
+        ],className="navbar-item")
+
+
+    ],className="navbar-brand")
+    ,
     html.Div([
         html.Div([
+            html.A([
+                "Home"
+
+            ],className="navbar-item"),
+            html.A([
+                "About"
+
+            ],className="navbar-item")
+
+        ],className="navbar-start")
+    ],className="navbar-menu")
+
+],className="navbar is-light has-shadow")
+body = html.Div([
+    html.Br(),
+    html.Br(),
+    html.Div([
+        html.Div([
+        html.Div([
+            dcc.Markdown(children='Filter by Country',className='title is-6 center'),
             dcc.Dropdown(id='countries-dropdown', options=countries),
         ], className='column is-one-third'),
         html.Div([
+            dcc.Markdown(children='Filter by Category',className='title is-6 center'),
             dcc.Dropdown(id='sub-categories-dropdown', options=sub_categories)
         ], className='column'),
         html.Div([
+            dcc.Markdown(children='Filter by Company',className='title is-6 center'),
             dcc.Dropdown(id='organisations-dropdown', options=organisations, optionHeight=60),
         ], className='column')
-    ], className='columns is-centered'),
+    ], className='columns is-centered')
+
+
+    ],className='card'),
+    html.Br(),
     html.Div([
         html.Div([
-            dcc.Graph(id='world-map', figure=world_map)
+            html.Div([
+                dcc.Graph(id='world-map', figure=world_map)
+
+            ],className='card'),
         ], className='column is-two-thirds'),
         html.Div([
             html.Div([
@@ -158,6 +199,7 @@ app.layout = html.Div([
                 ], className='content is-centered')
             ], className='card meta-info'),
             html.Br(),
+            html.Br(),
             html.Div([
                 html.Div([
                     html.Br(),
@@ -169,9 +211,11 @@ app.layout = html.Div([
             ], className='card meta-info'),
         ], className='column'),
     ], className='columns is-centered'),
-    html.Div([
+   html.Div([
         html.Div([
-            dcc.Markdown(children='You are looking at X')
+        html.Div([
+            dcc.Markdown(children='You are looking at',className='subtitle is-5 center'),
+            dcc.Markdown(className='title is-5 center', id='country-here-3')
         ], className='column is-half'),
         html.Div([
             dcc.Dropdown(id='compare-dropdown', options=countries, multi=True),
@@ -186,7 +230,21 @@ app.layout = html.Div([
             dcc.Graph(id='compare-plot')
         ], className='column')
     ], className='columns')
+
+   ],className='card')
 ], className='container is-fluid')
+
+
+def Homepage():
+    layout = html.Div([
+    nav,
+    body
+    ],style={'backgroundColor': '$light'})
+    return layout
+
+app.layout = Homepage(
+)
+
 
 if __name__ == "__main__":
     app.run_server(debug=True)

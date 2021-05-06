@@ -1,5 +1,5 @@
 start_template = """
-# Imperium: Looking at the EU
+# Looking at the EU
 """
 
 data_explorer_template = """

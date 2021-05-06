@@ -32,7 +32,7 @@ def compare_data(data, view):
 
     if result_df.empty:
         fig = px.scatter(result_df, x="lobbyists (FTE)", y="# of meetings", size="Approximated spending",
-                         hover_name=view, animation_group=view, log_x=True, size_max=60)
+                         hover_name=view, animation_group=view, log_x=True, size_max=60, template='plotly_white')
     else:
         spacing = 60
         min_x = max(0.1, result_df['lobbyists (FTE)'].min() - spacing*2)
@@ -41,6 +41,6 @@ def compare_data(data, view):
         max_y = result_df['# of meetings'].max() + spacing*2
         fig = px.scatter(result_df, x="lobbyists (FTE)", y="# of meetings", size="Approximated spending",
                          color=view, hover_name=view, animation_frame='year', animation_group=view, log_x=True,
-                         size_max=spacing)
+                         size_max=spacing, template='plotly_white')
 
     return fig
