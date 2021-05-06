@@ -27,10 +27,18 @@ def calc_totals(df):
 
 
 def explore_country(country_data):
+    '''
+        hovertemplate='MIN: %{error_y.arrayminus}<br>' +
+               'MIDDLE: %{y:}<br>' + 
+               'MAX: %{error_y.array}'
+    '''
+    # '<extra></extra>'
     year_list, sum_begin_int, sum_middle_int, sum_end_int = calc_totals(country_data)
 
     error_plus = sum_end_int - sum_middle_int
     error_minus = sum_middle_int - sum_begin_int
+
+    print([sum_begin_int.tolist(), sum_end_int.tolist()])
 
     fig = go.Figure(data=go.Scatter(
         x=year_list,
@@ -42,7 +50,11 @@ def explore_country(country_data):
             symmetric=False,
             color=marker_color,
             array=error_plus,
-            arrayminus=error_minus)
+            arrayminus=error_minus),
+        customdata = [sum_begin_int.tolist(), sum_end_int.tolist()],
+        hovertemplate='MIN: %{customdata[0]}<br>' +
+               'MIDDLE: %{y:}<br>' + 
+               'MAX: %{customdata[1]}',
     ))
 
     fig.update_layout(
