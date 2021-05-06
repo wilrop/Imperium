@@ -2,6 +2,7 @@ import argparse
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
+from dash.dependencies import Input, Output
 from dash.exceptions import PreventUpdate
 import plotly.express as px
 
@@ -41,7 +42,7 @@ def update_map(click_data):
         fig = world_plot.map_plot(iso3_codes, countries_business_amount,countries_list)
     return fig
 
-# Callback for country explorer plots
+'''# Callback for country explorer plots
 @app.callback(dash.dependencies.Output('country-explore-plot', 'figure'),
               [dash.dependencies.Input('countries-dropdown-explore', 'value')])
 def update_country_explorer(country):
@@ -92,6 +93,29 @@ def update_country_comparer(countries):
     countries_plot = comparer_plots.compare_countries(countries_data)
     return countries_plot
 
+'''
+
+
+# Callback to update the values in the compare dropdown
+@app.callback(Output('compare-dropdown', 'options'),
+              Output('compare-dropdown', 'value'),
+              [Input('countries-dropdown', 'value'),
+               Input('businesses-dropdown', 'value'),
+               Input('sub-categories-dropdown', 'value')])
+def update_compare_dropdown(country, business, sub_category):
+    ctx = dash.callback_context
+
+    if ctx.triggered:
+        dropdown = ctx.triggered[0]['prop_id'].split('.')[0]
+        if dropdown == 'countries-dropdown':
+            return countries, [country]
+        elif dropdown == 'businesses-dropdown':
+            return businesses, [business]
+        else:
+            return sub_categories, [sub_category]
+    else:
+        return countries, []
+
 
 # App layout
 app.layout = html.Div([
@@ -113,10 +137,10 @@ app.layout = html.Div([
         ], className='column is-two-thirds'),
         html.Div([
             html.Div([
-                dcc.Markdown(children='There are X companies here')
+                dcc.Markdown(children='There are X companies here', className='center')
             ], className='card meta-info'),
             html.Div([
-                dcc.Markdown(children='They spend between X and Y amount of money')
+                dcc.Markdown(children='They spend between X and Y amount of money', className='center')
             ], className='card meta-info')
         ], className='column'),
     ], className='columns'),
@@ -125,7 +149,7 @@ app.layout = html.Div([
             dcc.Markdown(children='You are looking at X')
         ], className='column is-half'),
         html.Div([
-            dcc.Dropdown(id='compare-dropdown'),
+            dcc.Dropdown(id='compare-dropdown', options=countries, multi=True),
         ], className='column')
     ], className='columns'),
     html.Div([

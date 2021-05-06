@@ -3,3 +3,8 @@
     flex-direction: column;
     height: 45%;
 }
+
+.center {
+    text-align: center;
+    vertical-align: middle;
+}
