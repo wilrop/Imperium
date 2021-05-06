@@ -12,7 +12,7 @@ from preprocessing import subcategory_to_main
 
 external_stylesheets = ['https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css']
 
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+app = dash.Dash(__name__,title="Imperium: Looking at the EU", external_stylesheets=external_stylesheets)
 data = DataLoader()  # Initialise the data loader.
 
 # Load static data
@@ -166,7 +166,7 @@ body = html.Div([
         html.Div([
         html.Div([
             dcc.Markdown(children='Filter by Country',className='title is-6 center'),
-            dcc.Dropdown(id='countries-dropdown', options=countries),
+            dcc.Dropdown(id='countries-dropdown', options=countries, style={'margin-left':'5px'}),
         ], className='column is-one-third'),
         html.Div([
             dcc.Markdown(children='Filter by Category',className='title is-6 center'),
@@ -174,7 +174,7 @@ body = html.Div([
         ], className='column'),
         html.Div([
             dcc.Markdown(children='Filter by Company',className='title is-6 center'),
-            dcc.Dropdown(id='organisations-dropdown', options=organisations, optionHeight=60),
+            dcc.Dropdown(id='organisations-dropdown', options=organisations, optionHeight=60,style={'margin-right':'5px'}),
         ], className='column')
     ], className='columns is-centered')
 
@@ -214,11 +214,11 @@ body = html.Div([
    html.Div([
         html.Div([
         html.Div([
-            dcc.Markdown(children='You are looking at',className='subtitle is-5 center'),
+            dcc.Markdown(children='You are looking at',className='subtitle is-5 center',style={'border-radius': '60px'}),
             dcc.Markdown(className='title is-5 center', id='country-here-3')
         ], className='column is-half'),
         html.Div([
-            dcc.Dropdown(id='compare-dropdown', options=countries, multi=True),
+            dcc.Dropdown(id='compare-dropdown', options=countries, multi=True,style={'margin-right':'5px'}),
         ], className='column')
     ], className='columns'),
     html.Div([
@@ -244,6 +244,12 @@ def Homepage():
 
 app.layout = Homepage(
 )
+app.head = [
+    html.Link(
+        href='/assets/logo2.jpg',
+        rel='icon'
+    ),
+]
 
 
 if __name__ == "__main__":
