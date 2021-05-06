@@ -6,7 +6,7 @@ from dash.exceptions import PreventUpdate
 import plotly.express as px
 
 import md_templates
-import world_map
+import world_map as world_plot
 import explorer_plots
 import comparer_plots
 from data_loader import DataLoader
@@ -24,9 +24,22 @@ sub_categories = data.get_sub_categories()
 businesses = data.get_businesses()
 
 # Load necessary data and plot for world map
-iso3_codes, countries_business_amount = data.get_country_amount_of_companies()
-world_map = world_map.map_plot(iso3_codes, countries_business_amount)
+iso3_codes, countries_business_amount,countries_list = data.get_country_amount_of_companies()
+world_map = world_plot.map_plot(iso3_codes, countries_business_amount,countries_list)
 
+
+
+@app.callback(dash.dependencies.Output('world-map', 'figure'),
+    [dash.dependencies.Input('world-map', 'clickData')]
+)
+def update_map(click_data):
+    if click_data != None:
+        country_name = click_data['points'][0]['hovertext']
+        iso_code = click_data['points'][0]['location']
+        fig = world_plot.map_plot_click(iso3_codes, countries_business_amount,countries_list,iso_code)
+    else:
+        fig = world_plot.map_plot(iso3_codes, countries_business_amount,countries_list)
+    return fig
 
 # Callback for country explorer plots
 @app.callback(dash.dependencies.Output('country-explore-plot', 'figure'),
