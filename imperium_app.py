@@ -81,22 +81,64 @@ def update_country_comparer(countries):
 
 
 # App layout
+app.layout = html.Div([
+    dcc.Markdown(children=md_templates.start_template),
+    html.Div([
+        html.Div([
+            dcc.Dropdown(id='countries-dropdown', options=countries),
+        ], className='column is-one-third'),
+        html.Div([
+            dcc.Dropdown(id='businesses-dropdown', options=businesses, optionHeight=60),
+        ], className='column'),
+        html.Div([
+            dcc.Dropdown(id='sub-categories-dropdown', options=sub_categories)
+        ], className='column')
+    ], className='columns'),
+    html.Div([
+        html.Div([
+            dcc.Graph(id='world-map', figure=world_map)
+        ], className='column is-two-thirds'),
+        html.Div([
+            html.Div([
+                dcc.Markdown(children='There are X companies here')
+            ], className='card meta-info'),
+            html.Div([
+                dcc.Markdown(children='They spend between X and Y amount of money')
+            ], className='card meta-info')
+        ], className='column'),
+    ], className='columns'),
+    html.Div([
+        html.Div([
+            dcc.Markdown(children='You are looking at X')
+        ], className='column is-half'),
+        html.Div([
+            dcc.Dropdown(id='compare-dropdown'),
+        ], className='column')
+    ], className='columns'),
+    html.Div([
+        html.Div([
+            dcc.Graph(id='explore-plot')
+        ], className='column is-half'),
+        html.Div([
+            dcc.Graph(id='compare-plot')
+        ], className='column')
+    ], className='columns')
+], className='container is-fluid')
 
 
+'''# App layout
 app.layout = html.Div([
     html.Div([
         html.Div([
             html.Div([
                 html.Div([
                     html.Div([
-
-                        dcc.Markdown(children=md_templates.start_template,className='title is-6'),
-                        dcc.Graph(id='world-map',figure=world_map)
-
-                    ],className='content')
-                ],className='card-content')
-            ],className='card')
-        ],className='column is-two-thirds'),
+                        dcc.Markdown(children=md_templates.start_template, className='title is-6'),
+                        dcc.Graph(id='world-map', figure=world_map)
+                    ], className='content')
+                ], className='card-content')
+            ], className='card')
+        ], className='column is-two-thirds'),
         html.Div([
              html.Div([
                 html.Div([
@@ -121,7 +163,7 @@ app.layout = html.Div([
 
                         dcc.Markdown(children=md_templates.explore_categories_template,className='title is-6'),
                         dcc.Markdown(children=md_templates.explore_categories_template),
-                        dcc.Dropdown(id='main-categories-dropdown-explore',options=categories),
+                        dcc.Dropdown(id='main-categories-dropdown-explore', options=categories),
                         dcc.Dropdown(id='sub-categories-dropdown-explore'),
                         dcc.Graph(id='category-explore-plot')
 
@@ -158,7 +200,7 @@ app.layout = html.Div([
         ],className='column'),
     ],className='columns'),
 
-],className="container is-fluid")
+],className="container is-fluid")'''
 
 '''
 app.layout = html.Div([

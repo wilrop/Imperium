@@ -71,7 +71,8 @@ class DataLoader:
         """
         sub_categories = []
         for lst in self.sub_categories.values():
-            sub_categories.append(lst.keys())
+            for sub_category in lst.keys():
+                sub_categories.append(sub_category)
         return sub_categories
 
     def load_businesses(self):
@@ -104,7 +105,7 @@ class DataLoader:
     def get_main_categories(self):
         """
         This method gets all main categories.
-        :return: A tuple of all main categories.
+        :return: A list of all main categories.
         """
         categories = []
         for category in self.main_categories_lst:
@@ -115,9 +116,13 @@ class DataLoader:
     def get_sub_categories(self):
         """
         This method gets all sub categories.
-        :return: A tuple of all sub categories.
+        :return: A list of all sub categories.
         """
-        return tuple(self.sub_categories_lst)
+        sub_categories = []
+        for sub_category in self.sub_categories_lst:
+            sub_category_dict = dict(label=sub_category, value=sub_category)
+            sub_categories.append(sub_category_dict)
+        return sub_categories
 
     def get_sub_categories_for_main(self, category):
         """
