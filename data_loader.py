@@ -235,4 +235,4 @@ class DataLoader:
             countries_bussines_amount.append(len(df_country))
 
         iso3_codes = coco.convert(names=self.countries_lst, to='ISO3')
-        return iso3_codes, countries_bussines_amount
+        return iso3_codes, countries_bussines_amount,self.countries_lst
