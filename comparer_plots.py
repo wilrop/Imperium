@@ -29,9 +29,9 @@ def compare_data(data, view):
 
     if result_df.empty:
         fig = px.scatter(result_df, x="lobbyists (FTE)", y="# of meetings", size="Approximated spending",
-                         hover_name="Country", log_x=True, size_max=60)
+                         hover_name="Country", log_x=True, size_max=60,template='plotly_white')
     else:
         fig = px.scatter(result_df, x="lobbyists (FTE)", y="# of meetings", size="Approximated spending",
-                     color=view, hover_name=view, log_x=True, size_max=60)
+                     color=view, hover_name=view, log_x=True, size_max=60,template='plotly_white')
 
     return fig
