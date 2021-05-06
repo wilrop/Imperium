@@ -105,6 +105,22 @@ string_to_int_subcategory = {
     'Other sub-national public authorities': 2
 }
 
+subcategory_to_main = {
+    'Professional consultancies': main_categories[1],
+    'Law firms': main_categories[1],
+    'Self-employed consultants': main_categories[1],
+    'Companies & groups': main_categories[2],
+    'Trade and business organisations': main_categories[2],
+    'Trade unions and professional associations': main_categories[2],
+    'Other in house lobbyists': main_categories[2],
+    'Non-governmental organisations, platforms and networks and similar': main_categories[3],
+    'Think tanks and research institutions': main_categories[4],
+    'Academic institutions': main_categories[4],
+    'Organisations representing churches and religious communities': main_categories[5],
+    'Regional structures': main_categories[6],
+    'Other sub-national public authorities': main_categories[6]
+}
+
 string_to_int_category = {
     'Professional consultancies/law firms/self-employed consultants': 1,
     'In-house lobbyists and trade/professional associations': 2,

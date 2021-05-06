@@ -11,6 +11,7 @@ import world_map as world_plot
 import explorer_plots
 import comparer_plots
 from data_loader import DataLoader
+from preprocessing import subcategory_to_main
 
 
 external_stylesheets = ['https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css']
@@ -60,6 +61,33 @@ def update_companies_here(value):
         value = ""
     return company_amount,value,ep_amount,value
 
+# Callback to update the values in the compare dropdown
+@app.callback(Output('explore-plot', 'figure'),
+              [Input('countries-dropdown', 'value'),
+               Input('businesses-dropdown', 'value'),
+               Input('sub-categories-dropdown', 'value')])
+def update_explore_dropdown(country, business, sub_category):
+    ctx = dash.callback_context
+
+    if ctx.triggered:
+        dropdown = ctx.triggered[0]['prop_id'].split('.')[0]
+        if dropdown == 'countries-dropdown':
+            country_data = data.get_country_data(country)
+            country_plot = explorer_plots.explore_country(country_data)
+            return country_plot
+        elif dropdown == 'businesses-dropdown':
+            business_data = data.get_business_data(business)
+            business_plot = explorer_plots.explore_business(business_data)
+            return business_plot
+        else:
+            main_category = subcategory_to_main[sub_category]
+            category_data = data.get_subcategory_data(main_category, sub_category)
+            category_plot = explorer_plots.explore_category(category_data)
+            return category_plot
+    else:
+        category_data = data.get_country_data(None)  # This data will the always be empty
+        category_plot = explorer_plots.explore_category(category_data)
+        return category_plot
 
 
 '''# Callback for country explorer plots
@@ -188,6 +216,7 @@ app.layout = html.Div([
     html.Div([
         html.Div([
             dcc.Graph(id='explore-plot')
+            # dcc.Graph(id='explore-plot')
         ], className='column is-half'),
         html.Div([
             dcc.Graph(id='compare-plot')
