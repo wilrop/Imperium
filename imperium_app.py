@@ -154,7 +154,7 @@ app.layout = html.Div([
                     html.Br(),
                     dcc.Markdown(className='subtitle is-3 center', id='country-here'),
                     dcc.Markdown(className='title is-3 center', id='companies-here'),
-                    dcc.Markdown(children=" companies here", className='subtitle is-3 center'),
+                    dcc.Markdown(children=" organisations in our database", className='subtitle is-3 center'),
                 ], className='content is-centered')
             ], className='card meta-info'),
             html.Br(),
