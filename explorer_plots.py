@@ -43,19 +43,20 @@ def explore_country(country_data):
             color=marker_color,
             array=error_plus,
             arrayminus=error_minus),
-        hovertemplate='MIN: %{error_y.arrayminus}<br>' +
-               'MIDDLE: %{y:}<br>' + 
-               'MAX: %{error_y.array}' + '<extra></extra>'
+        hovertemplate='Spending: <br>' +
+                      'Minimum: %{error_y.arrayminus} €<br>' +
+                      'Average: %{y:} €<br>' +
+                      'Maximum: %{error_y.array} €' + '<extra></extra>'
     ))
 
     fig.update_layout(
         template='plotly_white',
-    xaxis=dict(
-        rangeslider=dict(
-            visible=True
-        ),
-        type="date"
-    ))
+        xaxis=dict(
+            rangeslider=dict(
+                visible=True
+            ),
+            type="date"
+        ))
 
     return fig
 
@@ -77,19 +78,20 @@ def explore_category(category_data):
             color=marker_color,
             array=error_plus,
             arrayminus=error_minus),
-        hovertemplate='MIN: %{error_y.arrayminus}<br>' +
-               'MIDDLE: %{y:}<br>' + 
-               'MAX: %{error_y.array}'
+        hovertemplate='Spending: <br>' +
+                      'Minimum: %{error_y.arrayminus} €<br>' +
+                      'Average: %{y:} €<br>' +
+                      'Maximum: %{error_y.array} €' + '<extra></extra>'
     ))
 
     fig.update_layout(
         template='plotly_white',
-    xaxis=dict(
-        rangeslider=dict(
-            visible=True
-        ),
-        type="date"
-    ))
+        xaxis=dict(
+            rangeslider=dict(
+                visible=True
+            ),
+            type="date"
+        ))
 
     return fig
 
@@ -114,18 +116,19 @@ def explore_business(business_data):
             color=marker_color,
             array=error_plus,
             arrayminus=error_minus),
-        hovertemplate='MIN: %{error_y.arrayminus}<br>' +
-               'MIDDLE: %{y:}<br>' + 
-               'MAX: %{error_y.array}'
+        hovertemplate='Spending: <br>' +
+                      'Minimum: %{error_y.arrayminus} €<br>' +
+                      'Average: %{y:} €<br>' +
+                      'Maximum: %{error_y.array} €' + '<extra></extra>'
     ))
 
     fig.update_layout(
         template='plotly_white',
-    xaxis=dict(
-        rangeslider=dict(
-            visible=True
-        ),
-        type="date"
-    ))
+        xaxis=dict(
+            rangeslider=dict(
+                visible=True
+            ),
+            type="date"
+        ))
 
     return fig

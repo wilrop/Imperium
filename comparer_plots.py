@@ -1,6 +1,5 @@
 import pandas as pd
 import plotly.express as px
-import plotly.graph_objects as go
 
 
 def calc_totals(grouped_df, group_str):

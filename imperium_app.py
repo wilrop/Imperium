@@ -42,6 +42,24 @@ def update_map(click_data):
     return fig
 
 
+@app.callback(Output('companies-here', 'children'),
+              Output('country-here', 'children'),
+              Output('passes-here', 'children'),
+              Output('country-here-2', 'children'),
+              [Input('countries-dropdown', 'value')])
+def update_companies_here(value):
+    if value is not None:
+        country_data = data.get_countries_data([value])
+        company_amount = str(len(country_data))
+        ep_amount = str(country_data['EP passes'].sum())
+        value = value + " has "
+    else:
+        company_amount = "No country selected"
+        ep_amount = "No country selected"
+        value = ""
+    return company_amount, value, ep_amount, value
+
+
 # Callback to update the values in the compare dropdown
 @app.callback(Output('explore-plot', 'figure'),
               [Input('countries-dropdown', 'value'),
@@ -124,20 +142,33 @@ app.layout = html.Div([
         html.Div([
             dcc.Dropdown(id='organisations-dropdown', options=organisations, optionHeight=60),
         ], className='column')
-    ], className='columns'),
+    ], className='columns is-centered'),
     html.Div([
         html.Div([
             dcc.Graph(id='world-map', figure=world_map)
         ], className='column is-two-thirds'),
         html.Div([
             html.Div([
-                dcc.Markdown(children='There are X companies here', className='center')
+                html.Div([
+                    html.Br(),
+                    html.Br(),
+                    dcc.Markdown(className='subtitle is-3 center', id='country-here'),
+                    dcc.Markdown(className='title is-3 center', id='companies-here'),
+                    dcc.Markdown(children=" companies here", className='subtitle is-3 center'),
+                ], className='content is-centered')
             ], className='card meta-info'),
+            html.Br(),
             html.Div([
-                dcc.Markdown(children='They spend between X and Y amount of money', className='center')
-            ], className='card meta-info')
+                html.Div([
+                    html.Br(),
+                    html.Br(),
+                    dcc.Markdown(className='subtitle is-3 center', id='country-here-2'),
+                    dcc.Markdown(className='title is-3 center', id='passes-here'),
+                    dcc.Markdown(children=" EP passes", className='subtitle is-3 center'),
+                ], className='content is-centered')
+            ], className='card meta-info'),
         ], className='column'),
-    ], className='columns'),
+    ], className='columns is-centered'),
     html.Div([
         html.Div([
             dcc.Markdown(children='You are looking at X')
