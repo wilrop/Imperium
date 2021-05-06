@@ -213,10 +213,12 @@ body = html.Div([
    html.Div([
         html.Div([
         html.Div([
-            dcc.Markdown(children='You are looking at',className='subtitle is-5 center',style={'border-radius': '60px'}),
-            dcc.Markdown(className='title is-5 center', id='country-here-3')
+            dcc.Markdown(children='You are looking at ',className='subtitle is-4 center',style={'border-radius': '60px'}),
+            dcc.Markdown(className='title is-4 center', id='country-here-3')
         ], className='column is-half'),
         html.Div([
+            dcc.Markdown(children='Add more items to compare their lobbying practices over time!',
+                         className='subtitle is-4 center',style={'border-radius': '60px'}),
             dcc.Dropdown(id='compare-dropdown', options=countries, multi=True,style={'margin-right':'5px'}),
         ], className='column')
     ], className='columns'),

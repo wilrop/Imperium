@@ -6,13 +6,17 @@ def calc_totals(grouped_df, group_str):
     results = []
     for _, (by, group) in enumerate(grouped_df):
         if not group.empty:
-            year_group = group.groupby(['year'])
-            for _, (year, year_group) in enumerate(year_group):
-                lobbyists = year_group['lobbyists (FTE)'].sum()
-                meetings = year_group['# of meetings'].sum()
-                ep_passes = year_group['EP passes'].sum()
-                mid_point = year_group['end_int'].sum() - year_group['begin_int'].sum()
-                results.append([by, year, lobbyists, meetings, ep_passes, mid_point])
+            for year in range(2012, 2022):
+                year_data = group[group['year'] == year]
+                if year_data.empty:
+                    data = [by, year, 0, 0, 0, 0.00001]
+                else:
+                    lobbyists = year_data['lobbyists (FTE)'].sum()
+                    meetings = year_data['# of meetings'].sum()
+                    ep_passes = year_data['EP passes'].sum()
+                    mid_point = year_data['end_int'].sum() - year_data['begin_int'].sum()
+                    data = [by, year, lobbyists, meetings, ep_passes, mid_point]
+                results.append(data)
 
     columns = [group_str, 'year', 'lobbyists (FTE)', '# of meetings', 'EP passes', 'Approximated spending']
     df = pd.DataFrame(results, columns=columns)
@@ -35,7 +39,7 @@ def compare_data(data, view):
                          hover_name=view, animation_group=view, log_x=True, size_max=60, template='plotly_white')
     else:
         size_max = 50
-        padding = 0.2
+        padding = 0.25
         min_x = result_df['lobbyists (FTE)'].min()
         max_x = result_df['lobbyists (FTE)'].max()
         min_y = result_df['# of meetings'].min()
@@ -50,6 +54,6 @@ def compare_data(data, view):
                          color=view, hover_name=view, animation_frame='year', range_x=[min_x, max_x],
                          range_y=[min_y, max_y], size_max=size_max, template='plotly_white')
         fig.update_layout(transition={'duration': 1000})
-        fig.layout.updatemenus[0].buttons[0].args[1]['frame']['duration'] = 1000
-        fig.layout.updatemenus[0].buttons[0].args[1]['transition']['duration'] = 5000
+        fig.layout.updatemenus[0].buttons[0].args[1]['frame']['duration'] = 1200
+        fig.layout.updatemenus[0].buttons[0].args[1]['transition']['duration'] = 3000
     return fig
