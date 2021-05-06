@@ -42,7 +42,10 @@ def explore_country(country_data):
             symmetric=False,
             color=marker_color,
             array=error_plus,
-            arrayminus=error_minus)
+            arrayminus=error_minus),
+        hovertemplate='MIN: %{error_y.arrayminus}<br>' +
+               'MIDDLE: %{y:}<br>' + 
+               'MAX: %{error_y.array}' + '<extra></extra>'
     ))
 
     fig.update_layout(
@@ -73,7 +76,10 @@ def explore_category(category_data):
             symmetric=False,
             color=marker_color,
             array=error_plus,
-            arrayminus=error_minus)
+            arrayminus=error_minus),
+        hovertemplate='MIN: %{error_y.arrayminus}<br>' +
+               'MIDDLE: %{y:}<br>' + 
+               'MAX: %{error_y.array}'
     ))
 
     fig.update_layout(
@@ -107,7 +113,10 @@ def explore_business(business_data):
             symmetric=False,
             color=marker_color,
             array=error_plus,
-            arrayminus=error_minus)
+            arrayminus=error_minus),
+        hovertemplate='MIN: %{error_y.arrayminus}<br>' +
+               'MIDDLE: %{y:}<br>' + 
+               'MAX: %{error_y.array}'
     ))
 
     fig.update_layout(
