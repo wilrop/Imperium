@@ -12,7 +12,7 @@ from preprocessing import subcategory_to_main
 
 external_stylesheets = ['https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css']
 
-app = dash.Dash(__name__,title="Imperium: Looking at the EU", external_stylesheets=external_stylesheets)
+app = dash.Dash(__name__, title="Imperium: Looking at the EU", external_stylesheets=external_stylesheets)
 data = DataLoader()  # Initialise the data loader.
 
 # Load static data
@@ -61,7 +61,6 @@ def update_companies_here(value):
     return company_amount, value, ep_amount, value, value[:-4]
 
 
-# Callback to update the values in the compare dropdown
 @app.callback(Output('explore-plot', 'figure'),
               [Input('countries-dropdown', 'value'),
                Input('organisations-dropdown', 'value'),
@@ -89,24 +88,33 @@ def update_explore_dropdown(country, organisation, sub_category):
         return category_plot
 
 
-# Callback for comparer plots
-@app.callback(Output('compare-plot', 'figure'),
-              [Input('compare-dropdown', 'value')])
-def update_compare_plot(items):
-    if curr_view == 'Country':
-        df = data.get_countries_data(items)
-    elif curr_view == 'Category':
-        df = data.get_sub_categories_data(items)
-    else:
-        df = data.get_organisations_data(items)
+# Callback for compare country plot
+@app.callback(Output('compare-countries-plot', 'figure'),
+              [Input('compare-countries-dropdown', 'value')])
+def update_compare_countries_plot(selected_countries):
+    df = data.get_countries_data(selected_countries)
+    fig = comparer_plots.compare_data(df, 'Country')
+    return fig
 
-    fig = comparer_plots.compare_data(df, curr_view)
+# Callback for compare category plot
+@app.callback(Output('compare-categories-plot', 'figure'),
+              [Input('compare-categories-dropdown', 'value')])
+def update_compare_categories_plot(selected_categories):
+    df = data.get_sub_categories_data(selected_categories)
+    fig = comparer_plots.compare_data(df, 'Category')
+    return fig
+
+# Callback for compare organisation plot
+@app.callback(Output('compare-organisations-plot', 'figure'),
+              [Input('compare-organisations-dropdown', 'value')])
+def update_compare_organisations_plot(selected_organisations):
+    df = data.get_organisations_data(selected_organisations)
+    fig = comparer_plots.compare_data(df, 'Organisation')
     return fig
 
 
 # Callback to update the values in the compare dropdown
-@app.callback(Output('compare-dropdown', 'options'),
-              Output('compare-dropdown', 'value'),
+@app.callback(Output('compare-tabs', 'value'),
               [Input('countries-dropdown', 'value'),
                Input('organisations-dropdown', 'value'),
                Input('sub-categories-dropdown', 'value')])
@@ -114,19 +122,15 @@ def update_compare_dropdown(country, organisation, sub_category):
     ctx = dash.callback_context
 
     if ctx.triggered:
-        global curr_view
         dropdown = ctx.triggered[0]['prop_id'].split('.')[0]
         if dropdown == 'countries-dropdown':
-            curr_view = 'Country'
-            return countries, [country]
+            return 'tab-country'
         elif dropdown == 'organisations-dropdown':
-            curr_view = 'Organisation'
-            return organisations, [organisation]
+            return 'tab-organisation'
         else:
-            curr_view = 'Category'
-            return sub_categories, [sub_category]
+            return 'tab-category'
     else:
-        return countries, []
+        return 'tab-country'
 
 
 # App layout
@@ -137,55 +141,53 @@ nav = html.Nav([
         html.A([
             dcc.Markdown(children="IMPERIUM", className='title is-5 center'),
 
+        ], className="navbar-item")
 
-        ],className="navbar-item")
-
-
-    ],className="navbar-brand")
+    ], className="navbar-brand")
     ,
     html.Div([
         html.Div([
             html.A([
                 "Home"
 
-            ],className="navbar-item"),
+            ], className="navbar-item"),
             html.A([
                 "About"
 
-            ],className="navbar-item")
+            ], className="navbar-item")
 
-        ],className="navbar-start")
-    ],className="navbar-menu")
+        ], className="navbar-start")
+    ], className="navbar-menu")
 
-],className="navbar is-light has-shadow")
+], className="navbar is-light has-shadow")
 body = html.Div([
     html.Br(),
     html.Br(),
     html.Div([
         html.Div([
-        html.Div([
-            dcc.Markdown(children='Filter by Country',className='title is-6 center'),
-            dcc.Dropdown(id='countries-dropdown', options=countries, style={'margin-left':'5px'}),
-        ], className='column is-one-third'),
-        html.Div([
-            dcc.Markdown(children='Filter by Category',className='title is-6 center'),
-            dcc.Dropdown(id='sub-categories-dropdown', options=sub_categories)
-        ], className='column'),
-        html.Div([
-            dcc.Markdown(children='Filter by Company',className='title is-6 center'),
-            dcc.Dropdown(id='organisations-dropdown', options=organisations, optionHeight=60,style={'margin-right':'5px'}),
-        ], className='column')
-    ], className='columns is-centered')
+            html.Div([
+                dcc.Markdown(children='Filter by Country', className='title is-6 center'),
+                dcc.Dropdown(id='countries-dropdown', options=countries, style={'margin-left': '5px'}),
+            ], className='column is-one-third'),
+            html.Div([
+                dcc.Markdown(children='Filter by Category', className='title is-6 center'),
+                dcc.Dropdown(id='sub-categories-dropdown', options=sub_categories)
+            ], className='column'),
+            html.Div([
+                dcc.Markdown(children='Filter by Company', className='title is-6 center'),
+                dcc.Dropdown(id='organisations-dropdown', options=organisations, optionHeight=60,
+                             style={'margin-right': '5px'}),
+            ], className='column')
+        ], className='columns is-centered')
 
-
-    ],className='card'),
+    ], className='card'),
     html.Br(),
     html.Div([
         html.Div([
             html.Div([
                 dcc.Graph(id='world-map', figure=world_map)
 
-            ],className='card'),
+            ], className='card'),
         ], className='column is-two-thirds'),
         html.Div([
             html.Div([
@@ -210,40 +212,49 @@ body = html.Div([
             ], className='card meta-info'),
         ], className='column'),
     ], className='columns is-centered'),
-   html.Div([
-        html.Div([
-        html.Div([
-            dcc.Markdown(children='You are looking at ',className='subtitle is-4 center',style={'border-radius': '60px'}),
-            dcc.Markdown(className='title is-4 center', id='country-here-3')
-        ], className='column is-half'),
-        html.Div([
-            dcc.Markdown(children='Add more items to compare their lobbying practices over time!',
-                         className='subtitle is-4 center',style={'border-radius': '60px'}),
-            dcc.Dropdown(id='compare-dropdown', options=countries, multi=True,style={'margin-right':'5px'}),
-        ], className='column')
-    ], className='columns'),
     html.Div([
         html.Div([
-            dcc.Graph(id='explore-plot')
-            # dcc.Graph(id='explore-plot')
-        ], className='column is-half'),
-        html.Div([
-            dcc.Graph(id='compare-plot')
-        ], className='column')
-    ], className='columns')
-
-   ],className='card')
+            html.Div([
+                dcc.Markdown(children='You are looking at ', className='subtitle is-4 center',
+                             style={'border-radius': '60px'}),
+                dcc.Markdown(className='title is-4 center', id='country-here-3'),
+                dcc.Graph(id='explore-plot')
+            ], className='column is-half'),
+            html.Div([
+                # dcc.Markdown(children='Add more items to compare their lobbying practices over time!',
+                #             className='subtitle is-4 center', style={'border-radius': '60px'}),
+                dcc.Tabs(id='compare-tabs', value='tab-country', children=[
+                    dcc.Tab(label='Compare countries', value='tab-country', children=[
+                        dcc.Dropdown(id='compare-countries-dropdown', options=countries, multi=True,
+                                     style={'margin-right': '5px'}),
+                        dcc.Graph(id='compare-countries-plot')
+                    ]),
+                    dcc.Tab(label='Compare categories', value='tab-category',  children=[
+                        dcc.Dropdown(id='compare-categories-dropdown', options=sub_categories, multi=True,
+                                     style={'margin-right': '5px'}),
+                        dcc.Graph(id='compare-categories-plot')
+                    ]),
+                    dcc.Tab(label='Compare organisations', value='tab-organisation', children=[
+                        dcc.Dropdown(id='compare-organisations-dropdown', options=organisations, multi=True,
+                                     style={'margin-right': '5px'}),
+                        dcc.Graph(id='compare-organisations-plot')
+                    ])
+                ]),
+            ], className='column')
+        ], className='columns'),
+    ], className='card')
 ], className='container is-fluid')
 
 
-def Homepage():
+def homepage():
     layout = html.Div([
-    nav,
-    body
-    ],style={'backgroundColor': '$light'})
+        nav,
+        body
+    ], style={'backgroundColor': '$light'})
     return layout
 
-app.layout = Homepage(
+
+app.layout = homepage(
 )
 app.head = [
     html.Link(
@@ -251,7 +262,6 @@ app.head = [
         rel='icon'
     ),
 ]
-
 
 if __name__ == "__main__":
     app.run_server(debug=True)
