@@ -88,6 +88,27 @@ def update_explore_dropdown(country, organisation, sub_category):
         return category_plot
 
 
+@app.callback(Output('countries-dropdown', 'value'),
+              Output('organisations-dropdown', 'value'),
+              Output('sub-categories-dropdown', 'value'),
+              [Input('countries-dropdown', 'value'),
+               Input('organisations-dropdown', 'value'),
+               Input('sub-categories-dropdown', 'value')])
+def clear_other_dropdowns(country, organisation, sub_category):
+    ctx = dash.callback_context
+
+    if ctx.triggered:
+        dropdown = ctx.triggered[0]['prop_id'].split('.')[0]
+        if dropdown == 'countries-dropdown':
+            return country, None, None
+        elif dropdown == 'organisations-dropdown':
+            return None, organisation, None
+        else:
+            return None, None, sub_category
+    else:
+        return country, None, None
+
+
 # Callback for compare country plot
 @app.callback(Output('compare-countries-plot', 'figure'),
               [Input('compare-countries-dropdown', 'value')])
@@ -174,7 +195,7 @@ body = html.Div([
                 dcc.Dropdown(id='sub-categories-dropdown', options=sub_categories)
             ], className='column'),
             html.Div([
-                dcc.Markdown(children='Filter by Company', className='title is-6 center'),
+                dcc.Markdown(children='Filter by Organisation', className='title is-6 center'),
                 dcc.Dropdown(id='organisations-dropdown', options=organisations, optionHeight=60,
                              style={'margin-right': '5px'}),
             ], className='column')
@@ -236,7 +257,7 @@ body = html.Div([
                     ]),
                     dcc.Tab(label='Compare organisations', value='tab-organisation', children=[
                         dcc.Dropdown(id='compare-organisations-dropdown', options=organisations, multi=True,
-                                     style={'margin-right': '5px'}),
+                                     persistence=True, style={'margin-right': '5px'}, persistence_type='local'),
                         dcc.Graph(id='compare-organisations-plot')
                     ])
                 ]),
