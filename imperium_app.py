@@ -35,8 +35,9 @@ curr_view = 'Country'
               Output('country-here-2', 'children'),
               Output('country-here-3', 'children'),
               [Input('countries-dropdown', 'value'),
-               Input('organisations-dropdown', 'value')])
-def update_companies_here(country, organisation):
+               Input('organisations-dropdown', 'value'),
+               Input('sub-categories-dropdown', 'value')])
+def update_companies_here(country, organisation, sub_category):
     if country is not None:
         country_data = data.get_countries_data([country])
         company_amount = str(len(country_data))
@@ -50,6 +51,9 @@ def update_companies_here(country, organisation):
     
     if organisation is not None:
         country_here = organisation
+
+    if sub_category is not None:
+        country_here = sub_category
     return company_amount, country, ep_amount, country, country_here
 
 
