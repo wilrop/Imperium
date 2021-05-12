@@ -211,7 +211,6 @@ def read_files(columns):
                 df[main_cat_column_name] = main_cat_str
                 df[sub_cat_column_name] = sub_categories[j][key]
                 dataframes_cat.append(df)
-
     return dataframes, dataframes_cat
 
 
@@ -230,6 +229,8 @@ def generate_data():
     dataframe_cat = pd.concat(dataframes_cat)
     dataframe_all = dataframe_all.sort_values(by=[organisation_name_str, year_column_name])
     dataframe_cat = dataframe_cat.sort_values(by=[organisation_name_str, year_column_name])
+    dataframe_all['lobbyists (FTE)'] = dataframe_all['lobbyists (FTE)'].fillna(0)
+    dataframe_cat['lobbyists (FTE)'] = dataframe_cat['lobbyists (FTE)'].fillna(0)
     return dataframe_all, dataframe_cat
 
 
