@@ -30,15 +30,17 @@ curr_view = 'Country'
 
 
 # Callback for the worldmap interaction
-@app.callback(Output('world-map', 'figure'),
+@app.callback(Output('countries-dropdown', 'value'),
               [Input('world-map', 'clickData')])
 def update_map(click_data):
     if click_data is not None:
         country_name = click_data['points'][0]['hovertext']
         iso_code = click_data['points'][0]['location']
-        fig = world_plot.map_plot_click(iso3_codes, countries_business_amount, countries_list, iso_code)
+        fig = str(country_name)
+        #fig = world_plot.map_plot_click(iso3_codes, countries_business_amount, countries_list, iso_code)
     else:
-        fig = world_plot.map_plot(iso3_codes, countries_business_amount, countries_list)
+        fig = ""
+        #fig = world_plot.map_plot(iso3_codes, countries_business_amount, countries_list)
     return fig
 
 
