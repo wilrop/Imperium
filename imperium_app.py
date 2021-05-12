@@ -29,21 +29,6 @@ world_map = world_plot.map_plot(iso3_codes, countries_business_amount, countries
 curr_view = 'Country'
 
 
-# Callback for the worldmap interaction
-@app.callback(Output('countries-dropdown', 'value'),
-              [Input('world-map', 'clickData')])
-def update_map(click_data):
-    if click_data is not None:
-        country_name = click_data['points'][0]['hovertext']
-        iso_code = click_data['points'][0]['location']
-        fig = str(country_name)
-        #fig = world_plot.map_plot_click(iso3_codes, countries_business_amount, countries_list, iso_code)
-    else:
-        fig = ""
-        #fig = world_plot.map_plot(iso3_codes, countries_business_amount, countries_list)
-    return fig
-
-
 @app.callback(Output('companies-here', 'children'),
               Output('country-here', 'children'),
               Output('passes-here', 'children'),
@@ -93,22 +78,28 @@ def update_explore_dropdown(country, organisation, sub_category):
 @app.callback(Output('countries-dropdown', 'value'),
               Output('organisations-dropdown', 'value'),
               Output('sub-categories-dropdown', 'value'),
+              Output('world-map', 'clickData'),
               [Input('countries-dropdown', 'value'),
                Input('organisations-dropdown', 'value'),
-               Input('sub-categories-dropdown', 'value')])
-def clear_other_dropdowns(country, organisation, sub_category):
-    ctx = dash.callback_context
-
-    if ctx.triggered:
-        dropdown = ctx.triggered[0]['prop_id'].split('.')[0]
-        if dropdown == 'countries-dropdown':
-            return country, None, None
-        elif dropdown == 'organisations-dropdown':
-            return None, organisation, None
-        else:
-            return None, None, sub_category
+               Input('sub-categories-dropdown', 'value'),
+               Input('world-map', 'clickData')])
+def clear_other_dropdowns(country, organisation, sub_category, click_data):
+    if click_data is not None:
+        country_name = click_data['points'][0]['hovertext']
+        return str(country_name), None, None, None
     else:
-        return country, None, None
+        ctx = dash.callback_context
+
+        if ctx.triggered:
+            dropdown = ctx.triggered[0]['prop_id'].split('.')[0]
+            if dropdown == 'countries-dropdown':
+                return country, None, None, None
+            elif dropdown == 'organisations-dropdown':
+                return None, organisation, None, None
+            else:
+                return None, None, sub_category, None
+        else:
+            return country, None, None, None
 
 
 # Callback for compare country plot
