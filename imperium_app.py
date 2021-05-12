@@ -47,18 +47,23 @@ def update_map(click_data):
               Output('passes-here', 'children'),
               Output('country-here-2', 'children'),
               Output('country-here-3', 'children'),
-              [Input('countries-dropdown', 'value')])
-def update_companies_here(value):
-    if value is not None:
-        country_data = data.get_countries_data([value])
+              [Input('countries-dropdown', 'value'),
+               Input('organisations-dropdown', 'value')])
+def update_companies_here(country, organisation):
+    if country is not None:
+        country_data = data.get_countries_data([country])
         company_amount = str(len(country_data))
         ep_amount = str(country_data['EP passes'].sum())
-        value = value + " has "
+        country = country + " has "
     else:
         company_amount = "No country selected"
         ep_amount = "No country selected"
-        value = ""
-    return company_amount, value, ep_amount, value, value[:-4]
+        country = ""
+    country_here = country[:-4]
+    
+    if organisation is not None:
+        country_here = organisation
+    return company_amount, country, ep_amount, country, country_here
 
 
 @app.callback(Output('explore-plot', 'figure'),
