@@ -19,11 +19,11 @@ You can install the required libraries by using pip in a Conda environment or vi
 
 ## Usage
 
-`preprocessing.py` will start the preprocessing on the dowloaded CSV files and provide two preprocessed CSV files.
+`preprocessing.py` will start the preprocessing on the downloaded CSV files and provide two preprocessed CSV files.
 
 The code can be ran using the following command: `python preprocessing.py`
 
 
-`imperium_app.py` will start the application and the url you need to use to visit the web page will be printed in your terminal
+`imperium_app.py` will start the application and the URL you need to use to visit the web page will be printed in your terminal
 
 The code can be ran using the following command: `python imperium_app.py`
