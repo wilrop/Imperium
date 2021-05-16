@@ -313,14 +313,7 @@ body = html.Div([
 about = html.Div([html.Div([
     html.Br(),
     html.Div([html.Div([
-        dcc.Markdown('''
-## About
-Imperium is a data visualisation app that serves investigative journalists and concerned citizens with the knowledge they require and deserve. For too long we have had no idea what goes on in Brussels. Imperium aims to change that.
-##### Information about the data:
- * We have included employees spending 5% or more of their time engaged in relevant activities under the 25% band.
-
-#### Created by Willem Ropke, Sofyan Ajridi and Thomas Vaeyens
-''')
+        dcc.Markdown(md_templates.about_page)
 
 
     ], className="content is-normal")])

@@ -1,43 +1,52 @@
-start_template = """
-# Looking at the EU
-"""
+about_page = '''
+## Our Mission
+Imperium is a data visualisation app that serves investigative journalists and concerned citizens with the knowledge they require and deserve. 
+For too long we have had no idea what goes on in Brussels. Imperium aims to change that.
+Our mission is provide the most up-to-date information and combine this with intuitive data visualisations. 
+Like this, everyone has the ability to learn more about what goes on at the heart of Europe. 
+We hope that our platform can be of use to you and possibly result in positive changes due to increased awareness.
 
-data_explorer_template = """
-### Explore our data in the table beneath!
-"""
+##### Our Data
+We provide data that comes directly from the EU Transparency Register with some additional preprocessing steps by [LobbyFacts](https://lobbyfacts.eu/).
+Each organisation in this register provides the following data:
+- The organisation name
+- The location of their head office
+- The category this organisation belongs to (eg. law firms, educational organisation, etc)
+- Their estimated lobbying costs
+- The amount of EP passes
+- Amount of lobbyists under their employ
+- Date of registration
 
-map_template = """
-### Explore our interactive map!
-"""
+We let users filter on subsets of this data in order to observe interesting visualisations.
 
-explore_template = """
-### Explore lobbying data from the EU with our interactive visualisations!
-"""
+##### Terminology
+We realise that not everyone understands the jargon that is used in official EU documents. 
+As such we provide a quick overview of several terms that are often used.
 
-explore_countries_template = """
-Take a look at where head offices of lobbying organisations are situated around the world.
-"""
+| Term | Explanation | Additional info |
+|:-:|:-:|:-:|
+| EP Passes | EP Passes stands for European Parliament passes.  Simply put, it means how many access passes this organisation has to the European parliament. |  |
+| Lobbyists (FTE) | This terms means lobbyists or Full Time Equivalents. | We have included employees spending 5% or more of their time engaged in relevant activities under the 25% band. |
+| # of meetings | This simply means the total number of meetings that occurred. |  |
+| Average spending | As the dataset only provides a range of spending, we are sometimes forced to calculate an estimate of the spending. To do this, we take the average between the minimum and maximum of the range. | As an example, say a company reports a range of 0 to 100 euros. The average spending would be 50 euros. |
 
-explore_categories_template = """
-Every lobbying organisation in our database has been placed in a specific category. Select a category to take a look!
-"""
+##### Known Issues
 
-explore_businesses_template = """
-Have a specific business in mind that you want to get more information from? Select the right company and start investigating!
-"""
+There are several known issues both with the dataset. We present an overview below with an explanation regarding these problems.
 
-compare_template = """
-### Compare lobbying data by country, category or even on an individual business scale!
-"""
+1. The spending is only an approximation
+    - You are completely right in noticing this.
+    There is however nothing that we can do here, as the EU allows companies to give a range of spending rather than a concrete number. 
+    We don't like it either, so maybe if we all raise our voices they'll change it one day!
+2. Some of the organisations in the dataset show extreme spikes in spending, what is that about?
+    - The authorities in charge of the transparency register appear to be extremely lenient towards organisations and does not actively check submissions. 
+    We, as well as other people, have noticed several of these anomalies and suspect this is due to input errors of the organisations themselves.
+    As there is no way of knowing which data inputs are errors and which are actually correct, we leave the data as is.
+3. The organisations tab can load slowly when comparing
+    - This is a problem with the hosting provider we use for our platform. As we are only students, we have opted for a free plan which offers only limited speeds.
 
-compare_countries_template = """
-Want to know how different countries stack up against each other? Select them here and take a look!
-"""
+#### Created by Willem Ropke, Sofyan Ajridi and Thomas Vaeyens
 
-compare_categories_template = """
-Different categories have different spending habbits. Compare them here for a clear overview!
-"""
 
-compare_businesses_template = """
-Want to compare Google and Facebook or McDonalds and Pizza Hut? You can do that right here.
-"""
+
+'''
