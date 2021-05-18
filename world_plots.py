@@ -3,6 +3,8 @@ import plotly.express as px
 import plotly.graph_objects as go
 from geopy.geocoders import Nominatim
 
+geolocator = Nominatim(user_agent="Imperium")
+
 
 def map_plot(iso3_codes, countries_bussines_amount,countries_list):
     d = {'ISO-3': iso3_codes, 'spending': countries_bussines_amount, 'countries': countries_list}
@@ -35,7 +37,6 @@ def zoom_world_map(world_map, country_name):
     :param country_name: The country where the user has clicked.
     :return: An updated world map.
     """
-    geolocator = Nominatim(user_agent="Imperium")
     location = geolocator.geocode(country_name)
     latitude, longitude = location.latitude, location.longitude
     geo = dict(

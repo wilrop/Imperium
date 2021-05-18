@@ -140,7 +140,8 @@ def dropdown_map_interaction(country, organisation, sub_category, click_data):
         if ctx.triggered:
             dropdown = ctx.triggered[0]['prop_id'].split('.')[0]
             if dropdown == 'countries-dropdown':
-                return country, None, None, world_map, None
+                zoomed_world_map = world_plots.zoom_world_map(world_map, country)
+                return country, None, None, zoomed_world_map, None
             elif dropdown == 'organisations-dropdown':
                 return None, organisation, None, world_map, None
             else:
