@@ -4,7 +4,7 @@ import dash_html_components as html
 from dash.dependencies import Input, Output
 
 import md_templates
-import world_map as world_plot
+import world_plots
 import explorer_plots
 import comparer_plots
 from data_loader import DataLoader
@@ -25,7 +25,7 @@ organisations = data.get_organisations()
 
 # Load necessary data and plot for world map
 iso3_codes, countries_business_amount, countries_list = data.get_country_amount_of_organisations()
-world_map = world_plot.map_plot(
+world_map = world_plots.map_plot(
     iso3_codes, countries_business_amount, countries_list)
 
 # Load current view
@@ -90,11 +90,12 @@ def update_companies_here(country, organisation, sub_category):
     return info_here, info_here_2, country_here
 
 
+# Update the explore plots.
 @app.callback(Output('explore-plot', 'figure'),
               [Input('countries-dropdown', 'value'),
                Input('organisations-dropdown', 'value'),
                Input('sub-categories-dropdown', 'value')])
-def update_explore_dropdown(country, organisation, sub_category):
+def update_explore_plot(country, organisation, sub_category):
     ctx = dash.callback_context
 
     if ctx.triggered:
@@ -118,31 +119,34 @@ def update_explore_dropdown(country, organisation, sub_category):
         return category_plot
 
 
+# Callback to clear the other dropdowns when clicking on something.
 @app.callback(Output('countries-dropdown', 'value'),
               Output('organisations-dropdown', 'value'),
               Output('sub-categories-dropdown', 'value'),
+              Output('world-map', 'figure'),
               Output('world-map', 'clickData'),
               [Input('countries-dropdown', 'value'),
                Input('organisations-dropdown', 'value'),
                Input('sub-categories-dropdown', 'value'),
                Input('world-map', 'clickData')])
-def clear_other_dropdowns(country, organisation, sub_category, click_data):
+def dropdown_map_interaction(country, organisation, sub_category, click_data):
     if click_data is not None:
         country_name = click_data['points'][0]['hovertext']
-        return str(country_name), None, None, None
+        zoomed_world_map = world_plots.zoom_world_map(world_map, country_name)
+        return str(country_name), None, None, zoomed_world_map, None
     else:
         ctx = dash.callback_context
 
         if ctx.triggered:
             dropdown = ctx.triggered[0]['prop_id'].split('.')[0]
             if dropdown == 'countries-dropdown':
-                return country, None, None, None
+                return country, None, None, world_map, None
             elif dropdown == 'organisations-dropdown':
-                return None, organisation, None, None
+                return None, organisation, None, world_map, None
             else:
-                return None, None, sub_category, None
+                return None, None, sub_category, world_map, None
         else:
-            return country, None, None, None
+            return country, None, None, world_map, None
 
 
 # Callback for compare country plot
@@ -153,9 +157,8 @@ def update_compare_countries_plot(selected_countries):
     fig = comparer_plots.compare_data(df, 'Country')
     return fig
 
+
 # Callback for compare category plot
-
-
 @app.callback(Output('compare-categories-plot', 'figure'),
               [Input('compare-categories-dropdown', 'value')])
 def update_compare_categories_plot(selected_categories):
@@ -163,9 +166,8 @@ def update_compare_categories_plot(selected_categories):
     fig = comparer_plots.compare_data(df, 'Category')
     return fig
 
+
 # Callback for compare organisation plot
-
-
 @app.callback(Output('compare-organisations-plot', 'figure'),
               [Input('compare-organisations-dropdown', 'value')])
 def update_compare_organisations_plot(selected_organisations):
@@ -174,7 +176,7 @@ def update_compare_organisations_plot(selected_organisations):
     return fig
 
 
-# Callback to update the values in the compare dropdown
+# Callback to switch the tab in the compare dropdown
 @app.callback(Output('compare-tabs', 'value'),
               [Input('countries-dropdown', 'value'),
                Input('organisations-dropdown', 'value'),
@@ -195,8 +197,6 @@ def update_compare_dropdown(country, organisation, sub_category):
 
 
 # App layout
-
-
 nav = html.Nav([
     html.Div([
         html.A([
