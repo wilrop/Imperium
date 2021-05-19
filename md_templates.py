@@ -54,7 +54,7 @@ There are several known issues both with the dataset. We present an overview bel
 3. The organisations tab can load slowly when comparing
     - This is a problem with the hosting provider we use for our platform. As we are only students, we have opted for a free plan which offers only limited speeds.
 
-#### Created by Willem Ropke, Sofyan Ajridi and Thomas Vaeyens
+#### Created by Willem Röpke, Sofyan Ajridi and Thomas Vaeyens
 
 
 
