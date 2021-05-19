@@ -19,6 +19,15 @@ Each organisation in this register provides the following data:
 
 We let users filter on subsets of this data in order to observe interesting visualisations.
 
+##### Get Started
+In case you don't know where to start exploring, we have a couple of tips for you to kickstart your journey!
+
+- Take a look at our world map. Do you see that Belgium has an incredible amount of registered organisations, even when compared to much bigger countries within the EU. Why could that possibly be?
+    - Hint: Remind me again, where is the European Parliament located?
+- Select Facebook in our organisation filter. Do you see that steady rise since 2016 that really accelerates in 2018. Why on earth would that be?
+    - Hint: This might be pure coincidence (wink wink) but GDPR was adopted in 2016 and really went into effect in 2018...
+
+
 ##### Terminology
 We realise that not everyone understands the jargon that is used in official EU documents. 
 As such we provide a quick overview of several terms that are often used.
@@ -27,7 +36,7 @@ As such we provide a quick overview of several terms that are often used.
 |:-:|:-:|:-:|
 | EP Passes | EP Passes stands for European Parliament passes.  Simply put, it means how many access passes this organisation has to the European parliament. |  |
 | Lobbyists (FTE) | This terms means lobbyists or Full Time Equivalents. | We have included employees spending 5% or more of their time engaged in relevant activities under the 25% band. |
-| # of meetings | This simply means the total number of meetings that occurred. |  |
+| # of meetings | This simply means the total number of meetings with parliamentarians that occurred. |  |
 | Average spending | As the dataset only provides a range of spending, we are sometimes forced to calculate an estimate of the spending. To do this, we take the average between the minimum and maximum of the range. | As an example, say a company reports a range of 0 to 100 euros. The average spending would be 50 euros. |
 
 ##### Known Issues
