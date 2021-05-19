@@ -28,9 +28,6 @@ iso3_codes, countries_business_amount, countries_list = data.get_country_amount_
 world_map = world_plots.map_plot(
     iso3_codes, countries_business_amount, countries_list)
 
-# Load current view
-curr_view = 'Country'
-
 
 def aboutpage():
     layout = html.Div([
@@ -130,6 +127,9 @@ def update_explore_plot(country, organisation, sub_category):
                Input('sub-categories-dropdown', 'value'),
                Input('world-map', 'clickData')])
 def dropdown_map_interaction(country, organisation, sub_category, click_data):
+    world_map = world_plots.map_plot(
+        iso3_codes, countries_business_amount, countries_list)
+
     if click_data is not None:
         country_name = click_data['points'][0]['hovertext']
         zoomed_world_map = world_plots.zoom_world_map(world_map, country_name)
