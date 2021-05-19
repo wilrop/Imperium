@@ -51,6 +51,8 @@ def explore_country(country_data):
 
     fig.update_layout(
         template='plotly_white',
+        xaxis_title="Year",
+        yaxis_title="Total Spending",
         xaxis=dict(
             rangeslider=dict(
                 visible=True
@@ -86,6 +88,8 @@ def explore_category(category_data):
 
     fig.update_layout(
         template='plotly_white',
+        xaxis_title="Year",
+        yaxis_title="Total Spending",
         xaxis=dict(
             rangeslider=dict(
                 visible=True
@@ -124,6 +128,8 @@ def explore_business(business_data):
 
     fig.update_layout(
         template='plotly_white',
+        xaxis_title="Year",
+        yaxis_title="Total Spending",
         xaxis=dict(
             rangeslider=dict(
                 visible=True
