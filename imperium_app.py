@@ -72,9 +72,9 @@ def update_companies_here(country, organisation, sub_category):
             ep_passes += row[business_data.columns.get_loc('EP passes')]
             lobbyist += row[business_data.columns.get_loc('lobbyists (FTE)')]
         info_here = "**" + organisation + "**" + \
-            " has " + str(ep_passes) + " EP Passes"
-        info_here_2 = "**" + organisation + "**" + \
             " has " + str(lobbyist) + " lobbyists"
+        info_here_2 = "**" + organisation + "**" + \
+                    " has " + str(ep_passes) + " EP Passes"
     elif sub_category is not None:
         country_here = sub_category
         business_data = data.get_sub_categories_data([sub_category])
