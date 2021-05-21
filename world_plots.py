@@ -13,7 +13,7 @@ def map_plot(iso3_codes, countries_bussines_amount,countries_list):
                         locations='ISO-3',
                         color="spending",
                         scope="world",
-                        labels={'spending': 'Amount of companies'},
+                        labels={'spending': 'Amount of organisations'},
                         height=500,
                         hover_name=df['countries'],
                         hover_data=['spending'],
@@ -57,7 +57,7 @@ def map_plot_click(iso3_codes, countries_bussines_amount,countries_list , iso_se
                         locations=[iso_selected],
                         color=[1],
                         scope="world",
-                        labels={'spending': 'Amount of companies'},
+                        labels={'spending': 'Amount of organisations'},
                         height=500,
                         hover_data=['spending'],
                         custom_data=['spending','countries']

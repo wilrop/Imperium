@@ -59,9 +59,9 @@ def update_companies_here(country, organisation, sub_category):
         country_data = data.get_countries_data([country])
         company_amount = str(len(country_data))
         ep_amount = str(country_data['EP passes'].sum())
-        info_here = "**" + country + "**" + " has " + ep_amount + " EP Passes"
-        info_here_2 = "**" + country + "**" + " has " + \
+        info_here = "**" + country + "**" + " has " + \
             company_amount + " organisations in our database"
+        info_here_2 = "**" + country + "**" + " has " + ep_amount + " EP Passes"
         country_here = country
     elif organisation is not None:
         country_here = organisation
@@ -304,7 +304,7 @@ body = html.Div([
                     ]),
                     dcc.Tab(label='Compare organisations', value='tab-organisation', children=[
                         dcc.Dropdown(id='compare-organisations-dropdown', options=organisations, multi=True,
-                                     persistence=True, style={'margin-right': '5px'}, persistence_type='local'),
+                                     style={'margin-right': '5px'}, optionHeight=60),
                         dcc.Graph(id='compare-organisations-plot')
                     ])
                 ]),

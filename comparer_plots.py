@@ -53,7 +53,6 @@ def compare_data(data, view):
         fig = px.scatter(result_df, x="lobbyists (FTE)", y="# of meetings", size="Approximated spending",
                          color=view, hover_name=view, animation_frame='year', range_x=[min_x, max_x],
                          range_y=[min_y, max_y], size_max=size_max, template='plotly_white')
-        fig.update_layout(transition={'duration': 1000})
         fig.layout.updatemenus[0].buttons[0].args[1]['frame']['duration'] = 1250
         fig.layout.updatemenus[0].buttons[0].args[1]['transition']['duration'] = 3000
     return fig
