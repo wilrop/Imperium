@@ -8,7 +8,6 @@ import world_plots
 import explorer_plots
 import comparer_plots
 from data_loader import DataLoader
-from preprocessing import subcategory_to_main
 
 external_stylesheets = [
     'https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css']
@@ -102,9 +101,9 @@ def update_explore_plot(country, organisation, sub_category):
             country_plot = explorer_plots.explore_country(country_data)
             return country_plot
         elif dropdown == 'organisations-dropdown':
-            business_data = data.get_organisations_data([organisation])
-            business_plot = explorer_plots.explore_business(business_data)
-            return business_plot
+            organisation_data = data.get_organisations_data([organisation])
+            organisation_plot = explorer_plots.explore_organisation(organisation_data)
+            return organisation_plot
         else:
             category_data = data.get_sub_categories_data([sub_category])
             category_plot = explorer_plots.explore_category(category_data)

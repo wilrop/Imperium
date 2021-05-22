@@ -6,6 +6,7 @@ min_year = 2012
 # The maximum year of available data
 max_year = 2021
 
+# The number of possible years
 amount_years = max_year - min_year
 
 # Names of the new columns that are added to the dataframe
@@ -33,13 +34,7 @@ lobbyists_fte_str = 'lobbyists (FTE)'
 num_meetings_str = '# of meetings'
 registered_date_str = 'registered date'
 
-# Paths of the files that will be stored after preprocessing
-# File with all the data (no categories)
-all_file_name = './data/' + 'data_all.csv'
-# File with all the data (with categories)
-cat_file_name = './data/' + 'data_cat.csv'
-
-# Column types for the initial dataframe
+# Existing column types in the downloaded data
 columns = {
     organisation_name_str: str,
     country_head_office_str: str,
@@ -49,6 +44,12 @@ columns = {
     num_meetings_str: int,
     registered_date_str: str
 }
+
+# Paths of the files that will be stored after preprocessing
+# File with all the data (no categories)
+all_file_name = './data/' + 'data_all.csv'
+# File with all the data (with categories)
+cat_file_name = './data/' + 'data_cat.csv'
 
 # The folder in the data directory are numbered, each number represents a category which is given here.
 main_categories = {
@@ -89,48 +90,7 @@ sub_categories = {
     }
 }
 
-string_to_int_subcategory = {
-    'Professional consultancies': 1,
-    'Law firms': 2,
-    'Self-employed consultants': 3,
-    'Companies & groups': 1,
-    'Trade and business organisations': 2,
-    'Trade unions and professional associations': 3,
-    'Other in house lobbyists': 4,
-    'Non-governmental organisations, platforms and networks and similar': 1,
-    'Think tanks and research institutions': 1,
-    'Academic institutions': 2,
-    'Organisations representing churches and religious communities': 1,
-    'Regional structures': 1,
-    'Other sub-national public authorities': 2
-}
-
-subcategory_to_main = {
-    'Professional consultancies': main_categories[1],
-    'Law firms': main_categories[1],
-    'Self-employed consultants': main_categories[1],
-    'Companies & groups': main_categories[2],
-    'Trade and business organisations': main_categories[2],
-    'Trade unions and professional associations': main_categories[2],
-    'Other in house lobbyists': main_categories[2],
-    'Non-governmental organisations, platforms and networks and similar': main_categories[3],
-    'Think tanks and research institutions': main_categories[4],
-    'Academic institutions': main_categories[4],
-    'Organisations representing churches and religious communities': main_categories[5],
-    'Regional structures': main_categories[6],
-    'Other sub-national public authorities': main_categories[6]
-}
-
-string_to_int_category = {
-    'Professional consultancies/law firms/self-employed consultants': 1,
-    'In-house lobbyists and trade/professional associations': 2,
-    'Non-governmental organisations': 3,
-    'Think tanks, research and academic institutions': 4,
-    'Organisations representing churches and religious communities': 5,
-    'Organisations representing local, regional and municipal authorities, other public or mixed entities, etc.': 6
-}
-
-# Get the number of available main categories in the data
+# The number of available main categories in the data
 num_categories = len(main_categories.keys())
 
 
@@ -237,7 +197,11 @@ def generate_data():
 if __name__ == "__main__":
     print('Starting Preprocessing...')
     df_all, df_cat = generate_data()
-
+    print('Finished Preprocessing...')
+    
     # Save dataframes as CSV files
+    print('Starting File Saving...')
     df_all.to_csv(all_file_name, index=False)
     df_cat.to_csv(cat_file_name, index=False)
+
+    print('Finished')

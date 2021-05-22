@@ -3,6 +3,7 @@ import plotly.graph_objects as go
 from preprocessing import amount_years
 import numpy as np
 
+# The colours for the error bars and the lines connecting them.
 marker_color = 'rgba(55, 153, 81, 1)'
 line_color = 'rgba(55, 153, 81, 0.4)'
 
@@ -27,6 +28,15 @@ def calc_totals(df):
 
 
 def explore_country(country_data):
+    """
+    Method to a generate Plotly Error Bar plot which shows the total spending of a single country,
+    with error bars for each year which represent the lobbying cost intervals.
+    Args:
+        country_data (df): A pandas dataframe that contains all the information from
+        the selected country.
+    Returns:
+        fig (Figure): Return the newly created explore plot for a country.
+    """
     year_list, sum_begin_int, sum_middle_int, sum_end_int = calc_totals(country_data)
 
     error_plus = sum_end_int - sum_middle_int
@@ -64,6 +74,15 @@ def explore_country(country_data):
 
 
 def explore_category(category_data):
+    """
+    Method to a generate Plotly Error Bar plot which shows the total spending of a single organisation category,
+    with error bars for each year which represent the lobbying cost intervals.
+    Args:
+        category_data (df): A pandas dataframe that contains all the information from
+        the selected organisation category.
+    Returns:
+        fig (Figure): Return the newly created explore plot for an organisation category.
+    """
     year_list, sum_begin_int, sum_middle_int, sum_end_int = calc_totals(category_data)
 
     error_plus = sum_end_int - sum_middle_int
@@ -100,11 +119,20 @@ def explore_category(category_data):
     return fig
 
 
-def explore_business(business_data):
-    sum_begin_int = np.array(business_data['begin_int'])
-    sum_middle_int = np.array((business_data['begin_int'] + business_data['end_int']) / 2)
-    sum_end_int = np.array(business_data['end_int'])
-    year_list = [str(x) for x in list(business_data['year'])]
+def explore_organisation(organisation_data):
+    """
+    Method to a generate Plotly Error Bar plot which shows the total spending of a single organisation,
+    with error bars for each year which represent the lobbying cost intervals.
+    Args:
+        organisation_data (df): A pandas dataframe that contains all the information from
+        the selected organisation.
+    Returns:
+        fig (Figure): Return the newly created explore plot for a single organisation.
+    """
+    sum_begin_int = np.array(organisation_data['begin_int'])
+    sum_middle_int = np.array((organisation_data['begin_int'] + organisation_data['end_int']) / 2)
+    sum_end_int = np.array(organisation_data['end_int'])
+    year_list = [str(x) for x in list(organisation_data['year'])]
 
     error_plus = sum_end_int - sum_middle_int
     error_minus = sum_middle_int - sum_begin_int
