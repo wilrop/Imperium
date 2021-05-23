@@ -14,7 +14,9 @@ external_stylesheets = [
 
 app = dash.Dash(__name__, title="Imperium: Looking at the EU",
                 external_stylesheets=external_stylesheets, suppress_callback_exceptions=True)
-data = DataLoader()  # Initialise the data loader.
+
+# Initialise the data loader.
+data = DataLoader()
 
 # Load static data
 countries = data.get_countries()
@@ -93,7 +95,7 @@ def update_companies_here(country, organisation, sub_category):
                Input('sub-categories-dropdown', 'value')])
 def update_explore_plot(country, organisation, sub_category):
     ctx = dash.callback_context
-
+    
     if ctx.triggered:
         dropdown = ctx.triggered[0]['prop_id'].split('.')[0]
         if dropdown == 'countries-dropdown':
@@ -109,8 +111,8 @@ def update_explore_plot(country, organisation, sub_category):
             category_plot = explorer_plots.explore_category(category_data)
             return category_plot
     else:
-        category_data = data.get_countries_data(
-            [])  # This data will the always be empty
+        # This data will the always be empty
+        category_data = data.get_countries_data([])  
         category_plot = explorer_plots.explore_category(category_data)
         return category_plot
 
