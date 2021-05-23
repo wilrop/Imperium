@@ -9,6 +9,16 @@ line_color = 'rgba(55, 153, 81, 0.4)'
 
 
 def calc_totals(df):
+    """
+    Method to generate the minimum, the average and the maximum for the error bars in the plots.
+    Args:
+        df (df): Pandas dataframe which contains the data of the intervals.
+    Returns:
+        year_list (List[Int]): List of the years in the correct order.
+        sum_begin_int (List[Int]): List of the minimums of the intervals in the correct order.
+        sum_middle_int (List[Int]): List of the averages of the intervals in the correct order.
+        sum_end_int (List[Int]): List of the maximums of the intervals in the correct order.
+    """
     grouped_df = df.groupby(['year'])
 
     sum_begin_int = np.zeros(amount_years + 1)
@@ -32,7 +42,7 @@ def explore_country(country_data):
     Method to a generate Plotly Error Bar plot which shows the total spending of a single country,
     with error bars for each year which represent the lobbying cost intervals.
     Args:
-        country_data (df): A pandas dataframe that contains all the information from
+        country_data (dataframe): A pandas dataframe that contains all the information from
         the selected country.
     Returns:
         fig (Figure): Return the newly created explore plot for a country.
@@ -78,7 +88,7 @@ def explore_category(category_data):
     Method to a generate Plotly Error Bar plot which shows the total spending of a single organisation category,
     with error bars for each year which represent the lobbying cost intervals.
     Args:
-        category_data (df): A pandas dataframe that contains all the information from
+        category_data (dataframe): A pandas dataframe that contains all the information from
         the selected organisation category.
     Returns:
         fig (Figure): Return the newly created explore plot for an organisation category.
@@ -124,7 +134,7 @@ def explore_organisation(organisation_data):
     Method to a generate Plotly Error Bar plot which shows the total spending of a single organisation,
     with error bars for each year which represent the lobbying cost intervals.
     Args:
-        organisation_data (df): A pandas dataframe that contains all the information from
+        organisation_data (dataframe): A pandas dataframe that contains all the information from
         the selected organisation.
     Returns:
         fig (Figure): Return the newly created explore plot for a single organisation.
