@@ -3,6 +3,17 @@ import plotly.express as px
 
 
 def calc_totals(grouped_df, group_str):
+    """
+    Method to create a pandas dataframe with all the nessecary data to generate
+    the bubble chart plots in the compare_data method bellow.
+    Args:
+        grouped_df (dataframe): Dataframe which contains the data from the countries,
+                            organisations or categories.
+        group_str (Str): The selected type for which the data needs to be created 
+                    (Country, Organisation or Category).
+    Returns:
+        Fig (Figure): Returns the correct bubble chart plot.
+    """
     results = []
     for _, (by, group) in enumerate(grouped_df):
         if not group.empty:
@@ -24,6 +35,19 @@ def calc_totals(grouped_df, group_str):
 
 
 def compare_data(data, view):
+    """
+    Method to create a plotly animated bubble chart where the size of the bubble
+    represents the approximated spending, the position of the bubble on the x-axis shows
+    the number of meetings with the parliamentarians and the y-axis shows the number
+    of lobbyists in a single year. The animation shows this plot over multiple years.
+    Args:
+        data (dataframe): Dataframe which contains the data from the countries,
+                            organisations or categories.
+        view (Str): The selected type for which the plot needs to be created 
+                    (Country, Organisation or Category).
+    Returns:
+        Fig (Figure): Returns the correct bubble chart plot.
+    """
     if view == 'Country':
         data_grouped = data.groupby(['country head office'])
         result_df = calc_totals(data_grouped, 'Country')
